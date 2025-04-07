@@ -1,24 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wrong URL</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            padding: 50px;
-            background-color: #f9f9f9;
-        }
-        h1 {
-            color: #ff0000;
-        }
-        p {
-            color: #333;
-        }
-    </style>
-    <!-- Disable Inspect Element Shortcuts -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loading...</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 50px;
+      
+      
+    /* Flexbox centering */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    height: 80vh;
+    flex-direction: column; /* Stack elements vertically */
+      position: relative;
+    overflow: hidden;
+    
+    
+     /* Background image */
+    background-image: url('https://i.postimg.cc/rFhsZ2yY/Telegram.jpg'); /* Replace with your image link */
+    background-size: fit; /* Cover the entire background */
+    background-position: center bottom; /* Center the background image */
+    background-attachment: fixed; /* Keep the background fixed while scrolling *
+      
+   /* Ensure a solid background or semi-transparent overlay for the button to stand out */
+  .button-container {
+    position: relative; /* Contain elements */
+    z-index: 1; /* Ensure the button is above the background */
+  
+    }
+    .button {
+      background-color: #24A1DE;
+      border: 0;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      font-weight: bold;
+      margin: 10px 2px;
+      cursor: pointer;
+      border-radius: 15px;
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+    .button:hover {
+      background-color: #24A1DE;
+      color: white;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+      transform: scale(1.1);
+    }
+    
+     p {
+    color: white;
+       
+       
+     }
+    
+  </style>
+
+  <!-- Adsterra Popunder Script -->
+  <script type='text/javascript' src='//dedicationageunfortunately.com/75/98/6c/75986c7a6249ce6bb204c45b6300c718.js'></script>
+
+  <!-- Disable Inspect Element Shortcuts -->
   <script>
     document.addEventListener('contextmenu', event => event.preventDefault());
     document.onkeydown = function (e) {
@@ -34,7 +84,30 @@
   </script>
 </head>
 <body>
-    <h1></h1>
-    <p></p>
+
+  <h2></h2>
+
+  <button class="button" onclick="redirectToTelegram()">Watch Now</button>
+  
+  <p>Click here to watch the video. If an ad loads, just come back and click 'Watch Now' again.</p>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const redirectLink = params.get('link');
+
+    function redirectToTelegram() {
+      if (redirectLink) {
+        const btn = document.querySelector("button");
+        btn.disabled = true;
+        btn.innerText = "Loading in 3 seconds...";
+        setTimeout(() => {
+          window.location.href = redirectLink;
+        }, 3000);
+      } else {
+        document.body.innerHTML = "<h2>Error: No link provided!</h2>";
+      }
+    }
+  </script>
+
 </body>
 </html>
