@@ -9,7 +9,6 @@
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 50px;
-      
       /* Flexbox centering */
       display: flex;
       justify-content: center;
@@ -19,7 +18,6 @@
       flex-direction: column; /* Stack elements vertically */
       position: relative;
       overflow: hidden;
-      
       /* Background image */
       background-image: url('https://i.postimg.cc/135CPwQ3/Telegram.jpg'); /* Replace with your image link */
       background-size: fit; /* Cover the entire background */
@@ -27,10 +25,9 @@
       background-attachment: fixed; /* Keep the background fixed while scrolling */
     }
 
-    /* Ensure a solid background or semi-transparent overlay for the button to stand out */
     .button-container {
-      position: relative; /* Contain elements */
-      z-index: 1; /* Ensure the button is above the background */
+      position: relative;
+      z-index: 1;
     }
 
     .button {
@@ -60,31 +57,13 @@
     p {
       color: white;
     }
-    
+
     #countdown {
       font-size: 24px;
       font-weight: bold;
       color: white;
     }
   </style>
-
-  <!-- Adsterra Popunder Script -->
-  <script type='text/javascript' src='//dedicationageunfortunately.com/75/98/6c/75986c7a6249ce6bb204c45b6300c718.js'></script>
-
-  <!-- Disable Inspect Element Shortcuts -->
-  <script>
-    document.addEventListener('contextmenu', event => event.preventDefault());
-    document.onkeydown = function (e) {
-      if (
-        e.keyCode === 123 || // F12
-        (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
-        (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
-        (e.ctrlKey && e.keyCode === 85) // Ctrl+U
-      ) {
-        return false;
-      }
-    };
-  </script>
 </head>
 <body>
 
@@ -103,22 +82,40 @@
       document.getElementById("countdown").innerText = `Loading in ${seconds} seconds...`;
     }
 
+    function loadPopunderAd() {
+      // Create the script element for the popunder ad
+      const adScript = document.createElement('script');
+      adScript.src = '//dedicationageunfortunately.com/75/98/6c/75986c7a6249ce6bb204c45b6300c718.js'; // Popunder script URL
+      adScript.onload = () => {
+        console.log('Popunder ad script loaded successfully.');
+        startCountdown();  // Start countdown after the script loads
+      };
+      adScript.onerror = (error) => {
+        console.error('Error loading the popunder ad script: ', error);
+      };
+      document.body.appendChild(adScript);
+    }
+
+    function startCountdown() {
+      let countdown = 5; // Starting countdown from 5 seconds
+      updateCountdown(countdown); // Display countdown
+      countdownTimer = setInterval(() => {
+        countdown--;
+        updateCountdown(countdown); // Update countdown
+        if (countdown <= 0) {
+          clearInterval(countdownTimer);
+          window.location.href = redirectLink; // Redirect after countdown
+        }
+      }, 1000); // Update every second
+    }
+
     function redirectToTelegram() {
       if (redirectLink) {
         const btn = document.querySelector("button");
         btn.disabled = true;
         btn.innerText = "Loading...";
 
-        let countdown = 5; // Starting countdown from 3 seconds
-        updateCountdown(countdown); // Display countdown
-        countdownTimer = setInterval(() => {
-          countdown--;
-          updateCountdown(countdown); // Update countdown
-          if (countdown <= 0) {
-            clearInterval(countdownTimer);
-            window.location.href = redirectLink; // Redirect after countdown
-          }
-        }, 1000); // Update every second
+        loadPopunderAd(); // Load the popunder ad when the button is clicked
       } else {
         document.body.innerHTML = "<h2>Error: No link provided!</h2>";
       }
