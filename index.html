@@ -10,30 +10,29 @@
       text-align: center;
       padding: 50px;
       
-      
-    /* Flexbox centering */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0;
-    height: 80vh;
-    flex-direction: column; /* Stack elements vertically */
+      /* Flexbox centering */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 0;
+      height: 80vh;
+      flex-direction: column; /* Stack elements vertically */
       position: relative;
-    overflow: hidden;
+      overflow: hidden;
     
-    
-     /* Background image */
-    background-image: url('https://i.postimg.cc/2S2tBTwW/Telegram.jpg'); /* Replace with your image link */
-    background-size: fit; /* Cover the entire background */
-    background-position: center top; /* Center the background image */
-    background-attachment: fixed; /* Keep the background fixed while scrolling *
-      
-   /* Ensure a solid background or semi-transparent overlay for the button to stand out */
-  .button-container {
-    position: relative; /* Contain elements */
-    z-index: 1; /* Ensure the button is above the background */
-  
+      /* Background image */
+      background-image: url('https://i.postimg.cc/2S2tBTwW/Telegram.jpg'); /* Replace with your image link */
+      background-size: fit; /* Cover the entire background */
+      background-position: center top; /* Center the background image */
+      background-attachment: fixed; /* Keep the background fixed while scrolling */
     }
+
+    /* Ensure a solid background or semi-transparent overlay for the button to stand out */
+    .button-container {
+      position: relative; /* Contain elements */
+      z-index: 1; /* Ensure the button is above the background */
+    }
+
     .button {
       background-color: #24A1DE;
       border: 0;
@@ -50,6 +49,7 @@
       box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
       transition: transform 0.3s ease, background-color 0.3s ease;
     }
+
     .button:hover {
       background-color: #24A1DE;
       color: white;
@@ -57,13 +57,22 @@
       transform: scale(1.1);
     }
     
-     p {
-    color: white;
-       
-       
-     }
-    
+    p {
+      color: white;
+    }
+
+    /* Hide the HitWebCounter */
+    #counter {
+      display: none;
+    }
   </style>
+
+  <!-- HitWebCounter Code (Hidden) -->
+  <div id="counter">
+    <a href="https://www.hitwebcounter.com" target="_blank">
+      <img src="https://hitwebcounter.com/counter/counter.php?page=20321389&style=0029&nbdigits=5&type=page&initCount=0" title="Visitor Counter" alt="Visitor Counter" border="0" />
+    </a>
+  </div>
 
   <!-- Adsterra Popunder Script -->
   <script type='text/javascript' src='//dedicationageunfortunately.com/75/98/6c/75986c7a6249ce6bb204c45b6300c718.js'></script>
