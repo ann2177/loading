@@ -74,9 +74,6 @@
     </a>
   </div>
 
-  <!-- Adsterra Popunder Script -->
-  <script type='text/javascript' src='//dedicationageunfortunately.com/75/98/6c/75986c7a6249ce6bb204c45b6300c718.js'></script>
-
   <!-- Disable Inspect Element Shortcuts -->
   <script>
     document.addEventListener('contextmenu', event => event.preventDefault());
@@ -96,27 +93,36 @@
 
   <h2></h2>
 
-  <button class="button" onclick="redirectToTelegram()">Watch Now</button>
+ <button class="button" onclick="goNow()">Watch Now</button>
   
   <p>Click here to watch the video. If an ad loads, just come back and click 'Watch Now' again.</p>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const redirectLink = params.get('link');
+    // Get the link from the URL parameter
+    const url = new URLSearchParams(window.location.search).get('link');
 
-    function redirectToTelegram() {
-      if (redirectLink) {
-        const btn = document.querySelector("button");
-        btn.disabled = true;
-        btn.innerText = "Loading...";
-        setTimeout(() => {
-          window.location.href = redirectLink;
-        }, 1000);
+    // Your Adsterra link
+    const adLink = "https://dedicationageunfortunately.com/uxfadd83ug?key=f49b9c499c4dba3250af0a6fa8ca79f4";
+
+    // Get or initialize click count from localStorage
+    let clickCount = parseInt(localStorage.getItem("clickCount")) || 0;
+
+    function goNow() {
+      clickCount++;
+      localStorage.setItem("clickCount", clickCount);
+
+      if (clickCount % 2 === 1) {
+        // Odd click: Ads
+        window.location.href = adLink;
       } else {
-        document.body.innerHTML = "<h2>Error: No link provided!</h2>";
+        // Even click: Link
+        if (url) {
+          window.location.href = url;
+        } else {
+          document.body.innerHTML = "<h2>Error: No link provided!</h2>";
+        }
       }
     }
   </script>
-
 </body>
 </html>
