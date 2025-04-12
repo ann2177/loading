@@ -9,28 +9,31 @@
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 50px;
-      
+
       /* Flexbox centering */
       display: flex;
       justify-content: center;
       align-items: center;
       margin: 0;
       height: 80vh;
-      flex-direction: column; /* Stack elements vertically */
+      flex-direction: column;
       position: relative;
       overflow: hidden;
-    
+
       /* Background image */
-      background-image: url('https://i.postimg.cc/2S2tBTwW/Telegram.jpg'); /* Replace with your image link */
-      background-size: fit; /* Cover the entire background */
-      background-position: center top; /* Center the background image */
-      background-attachment: fixed; /* Keep the background fixed while scrolling */
+      background-image: url('https://i.postimg.cc/2S2tBTwW/Telegram.jpg');
+      background-size: cover;
+      background-position: center top;
+      background-attachment: fixed;
     }
 
-    /* Ensure a solid background or semi-transparent overlay for the button to stand out */
     .button-container {
-      position: relative; /* Contain elements */
-      z-index: 1; /* Ensure the button is above the background */
+      position: relative;
+      z-index: 1;
+       display: flex;
+      flex-direction: column;
+      gap: 20px; /* Space between buttons */
+      
     }
 
     .button {
@@ -56,23 +59,17 @@
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
       transform: scale(1.1);
     }
-    
+
     p {
       color: white;
     }
-
-    /* Hide the HitWebCounter */
-    #counter {
-      display: none;
+    
+    h2 {
+      color: white;
+      margin-bottom: 30px;
     }
+    
   </style>
-
-  <!-- HitWebCounter Code (Hidden) -->
-  <div id="counter">
-    <a href="https://www.hitwebcounter.com" target="_blank">
-      <img src="https://hitwebcounter.com/counter/counter.php?page=20321389&style=0029&nbdigits=5&type=page&initCount=0" title="Visitor Counter" alt="Visitor Counter" border="0" />
-    </a>
-  </div>
 
   <!-- Disable Inspect Element Shortcuts -->
   <script>
@@ -91,38 +88,39 @@
 </head>
 <body>
 
-  <h2></h2>
-
- <button class="button" onclick="goNow()">Watch Now</button>
-  
-  <p>Click here to watch the video. If an ad loads, just come back and click 'Watch Now' again.</p>
+  <h2>Select Server</h2>
+  <div id="buttonContainer" class="button-container"></div>
 
   <script>
-    // Get the link from the URL parameter
-    const url = new URLSearchParams(window.location.search).get('link');
+    const telegramLink = new URLSearchParams(window.location.search).get("link");
+    const adLinks = [
+      "https://rb.gy/5qj50b",
+      "https://rb.gy/ksm5mw"
+    ];
 
-    // Your Adsterra link
-    const adLink = "https://dedicationageunfortunately.com/uxfadd83ug?key=f49b9c499c4dba3250af0a6fa8ca79f4";
+    const buttons = [
+      { type: "ad", url: adLinks[0] },
+      { type: "ad", url: adLinks[1] },
+      { type: "telegram", url: telegramLink }
+    ];
 
-    // Get or initialize click count from localStorage
-    let clickCount = parseInt(localStorage.getItem("clickCount")) || 0;
+    const shuffled = buttons.sort(() => 0.5 - Math.random());
 
-    function goNow() {
-      clickCount++;
-      localStorage.setItem("clickCount", clickCount);
+    const container = document.getElementById("buttonContainer");
 
-      if (clickCount % 2 === 1) {
-        // Odd click: Ads
-        window.location.href = adLink;
-      } else {
-        // Even click: Link
-        if (url) {
-          window.location.href = url;
+    shuffled.forEach((btn, index) => {
+      const button = document.createElement("button");
+      button.className = "button";
+      button.innerText = "Server " + (index + 1);
+      button.onclick = () => {
+        if (btn.type === "telegram" && !btn.url) {
+          document.body.innerHTML = "<h2>Error: Telegram link not provided</h2>";
         } else {
-          document.body.innerHTML = "<h2>Error: No link provided!</h2>";
+          window.location.href = btn.url;
         }
-      }
-    }
+      };
+      container.appendChild(button);
+    });
   </script>
 </body>
 </html>
