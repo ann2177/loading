@@ -95,35 +95,43 @@
   <div id="buttonContainer" class="button-container"></div>
 
   <script>
-    const telegramLink = new URLSearchParams(window.location.search).get("link");
-    const adLinks = [
-      "https://dedicationageunfortunately.com/uxfadd83ug?key=f49b9c499c4dba3250af0a6fa8ca79f4",
-      "https://dedicationageunfortunately.com/pc2npqv1q?key=ce938f1b0334a4a833f4137da0cd4094"
-    ];
+  const telegramLink = new URLSearchParams(window.location.search).get("link");
+  const adLinks = [
+    "https://dedicationageunfortunately.com/uxfadd83ug?key=f49b9c499c4dba3250af0a6fa8ca79f4",
+    "https://dedicationageunfortunately.com/pc2npqv1q?key=ce938f1b0334a4a833f4137da0cd4094"
+  ];
 
-    const buttons = [
-      { type: "ad", url: adLinks[0] },
-      { type: "ad", url: adLinks[1] },
-      { type: "telegram", url: telegramLink }
-    ];
+  const buttons = [];
 
-    const shuffled = buttons.sort(() => 0.5 - Math.random());
+  // If telegramLink is provided, add the telegram button
+  if (telegramLink) {
+    buttons.push({ type: "telegram", url: telegramLink });
+  }
+  
+  // Add ad buttons
+  adLinks.forEach(link => {
+    buttons.push({ type: "ad", url: link });
+  });
 
-    const container = document.getElementById("buttonContainer");
+  // Shuffle the buttons
+  const shuffled = buttons.sort(() => 0.5 - Math.random());
 
-    shuffled.forEach((btn, index) => {
-      const button = document.createElement("button");
-      button.className = "button";
-      button.innerText = "Server " + (index + 1);
-      button.onclick = () => {
-        if (btn.type === "telegram" && !btn.url) {
-          document.body.innerHTML = "<h2>Error: Video link not provided!</h2>";
-        } else {
-          window.location.href = btn.url;
-        }
-      };
-      container.appendChild(button);
-    });
-  </script>
+  const container = document.getElementById("buttonContainer");
+
+  shuffled.forEach((btn, index) => {
+    const button = document.createElement("button");
+    button.className = "button";
+    button.innerText = "Server " + (index + 1);
+    button.onclick = () => {
+      if (btn.type === "telegram" && !btn.url) {
+        document.body.innerHTML = "<h2>Error: Video link not provided!</h2>";
+      } else {
+        window.location.href = btn.url;
+      }
+    };
+    container.appendChild(button);
+  });
+</script>
+
 </body>
 </html>
