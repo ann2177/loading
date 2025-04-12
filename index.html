@@ -94,60 +94,80 @@
   <h2>Select Server</h2>
   <div id="buttonContainer" class="button-container"></div>
 
-  <script>
-  const telegramLink = new URLSearchParams(window.location.search).get("link");
-const adLinks = [
-  "https://dedicationageunfortunately.com/uxfadd83ug?key=f49b9c499c4dba3250af0a6fa8ca79f4",
-  "https://dedicationageunfortunately.com/pc2npqv1q?key=ce938f1b0334a4a833f4137da0cd4094"
-];
-
-const buttons = [];
-
-if (telegramLink) {
-  buttons.push({ type: "telegram", url: telegramLink });
-}
-
-adLinks.forEach(link => {
-  buttons.push({ type: "ad", url: link });
-});
-
-// Fisher-Yates shuffle function
-function fisherYatesShuffle(array) {
-  const shuffled = array.slice(); // copy array
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-}
-
-const storageKey = "shuffledButtons_" + encodeURIComponent(telegramLink || "noLink");
-
-let shuffled = JSON.parse(localStorage.getItem(storageKey));
-
-if (!shuffled) {
-  shuffled = fisherYatesShuffle(buttons);
-  localStorage.setItem(storageKey, JSON.stringify(shuffled));
-}
-
-const container = document.getElementById("buttonContainer");
-
-shuffled.forEach((btn, index) => {
-  const button = document.createElement("button");
-  button.className = "button";
-  button.innerText = "Server " + (index + 1);
-  button.onclick = () => {
-    if (btn.type === "telegram" && !btn.url) {
-      document.body.innerHTML = "<h2>Error: Video link not provided!</h2>";
-    } else {
-      window.location.href = btn.url;
+   <script>
+    // Fisher-Yates Shuffle Function
+    function fisherYatesShuffle(array) {
+      const shuffled = array.slice(); // copy array
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
     }
-  };
-  container.appendChild(button);
-});
 
-</script>
+    // Controlled Biased Shuffle (20-25% chance to make Telegram first)
+    function biasedShuffle(buttons, telegramLink) {
+      const telegramBtn = buttons.find(b => b.type === "telegram");
+      const others = buttons.filter(b => b.type !== "telegram");
 
+      const chance = Math.random(); // 0 to 1
+
+      let shuffled;
+
+      // 20–25% chance to place telegram first
+      if (telegramBtn && chance <= 0.20) {
+        const shuffledOthers = fisherYatesShuffle(others);
+        shuffled = [telegramBtn, ...shuffledOthers];
+      } else {
+        shuffled = fisherYatesShuffle(buttons);
+      }
+
+      return shuffled;
+    }
+
+    window.onload = function () {
+      const telegramLink = new URLSearchParams(window.location.search).get("link");
+      const adLinks = [
+        "https://dedicationageunfortunately.com/uxfadd83ug?key=f49b9c499c4dba3250af0a6fa8ca79f4",
+        "https://dedicationageunfortunately.com/pc2npqv1q?key=ce938f1b0334a4a833f4137da0cd4094"
+      ];
+
+      const buttons = [];
+
+      if (telegramLink) {
+        buttons.push({ type: "telegram", url: telegramLink });
+      }
+
+      adLinks.forEach(link => {
+        buttons.push({ type: "ad", url: link });
+      });
+
+      const storageKey = "shuffledButtons_" + encodeURIComponent(telegramLink || "noLink");
+
+      let shuffled = JSON.parse(localStorage.getItem(storageKey));
+
+      if (!shuffled) {
+        shuffled = biasedShuffle(buttons, telegramLink);
+        localStorage.setItem(storageKey, JSON.stringify(shuffled));
+      }
+
+      const container = document.getElementById("buttonContainer");
+
+      shuffled.forEach((btn, index) => {
+        const button = document.createElement("button");
+        button.className = "button";
+        button.innerText = "Server " + (index + 1);
+        button.onclick = () => {
+          if (btn.type === "telegram" && !btn.url) {
+            document.body.innerHTML = "<h2>Error: Video link not provided!</h2>";
+          } else {
+            window.location.href = btn.url;
+          }
+        };
+        container.appendChild(button);
+      });
+    }
+  </script>
 
 </body>
 </html>
