@@ -68,7 +68,7 @@
     }
     
     h2 {
-      color: Red;
+      color: White;
       margin-bottom: 30px;
     }
     
@@ -96,46 +96,56 @@
 
   <script>
   const telegramLink = new URLSearchParams(window.location.search).get("link");
-  const adLinks = [
-    "https://dedicationageunfortunately.com/uxfadd83ug?key=f49b9c499c4dba3250af0a6fa8ca79f4",
-    "https://dedicationageunfortunately.com/pc2npqv1q?key=ce938f1b0334a4a833f4137da0cd4094"
-  ];
+const adLinks = [
+  "https://dedicationageunfortunately.com/uxfadd83ug?key=f49b9c499c4dba3250af0a6fa8ca79f4",
+  "https://dedicationageunfortunately.com/pc2npqv1q?key=ce938f1b0334a4a833f4137da0cd4094"
+];
 
-  const buttons = [];
+const buttons = [];
 
-  if (telegramLink) {
-    buttons.push({ type: "telegram", url: telegramLink });
+if (telegramLink) {
+  buttons.push({ type: "telegram", url: telegramLink });
+}
+
+adLinks.forEach(link => {
+  buttons.push({ type: "ad", url: link });
+});
+
+// Fisher-Yates shuffle function
+function fisherYatesShuffle(array) {
+  const shuffled = array.slice(); // copy array
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
-  
-  adLinks.forEach(link => {
-    buttons.push({ type: "ad", url: link });
-  });
+  return shuffled;
+}
 
-  // Use unique key based on telegramLink
-  const storageKey = "shuffledButtons_" + encodeURIComponent(telegramLink || "noLink");
+const storageKey = "shuffledButtons_" + encodeURIComponent(telegramLink || "noLink");
 
-  let shuffled = JSON.parse(localStorage.getItem(storageKey));
+let shuffled = JSON.parse(localStorage.getItem(storageKey));
 
-  if (!shuffled) {
-    shuffled = buttons.sort(() => 0.5 - Math.random());
-    localStorage.setItem(storageKey, JSON.stringify(shuffled));
-  }
+if (!shuffled) {
+  shuffled = fisherYatesShuffle(buttons);
+  localStorage.setItem(storageKey, JSON.stringify(shuffled));
+}
 
-  const container = document.getElementById("buttonContainer");
+const container = document.getElementById("buttonContainer");
 
-  shuffled.forEach((btn, index) => {
-    const button = document.createElement("button");
-    button.className = "button";
-    button.innerText = "Server " + (index + 1);
-    button.onclick = () => {
-      if (btn.type === "telegram" && !btn.url) {
-        document.body.innerHTML = "<h2>Error: Video link not provided!</h2>";
-      } else {
-        window.location.href = btn.url;
-      }
-    };
-    container.appendChild(button);
-  });
+shuffled.forEach((btn, index) => {
+  const button = document.createElement("button");
+  button.className = "button";
+  button.innerText = "Server " + (index + 1);
+  button.onclick = () => {
+    if (btn.type === "telegram" && !btn.url) {
+      document.body.innerHTML = "<h2>Error: Video link not provided!</h2>";
+    } else {
+      window.location.href = btn.url;
+    }
+  };
+  container.appendChild(button);
+});
+
 </script>
 
 
