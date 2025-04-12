@@ -115,7 +115,7 @@
       let shuffled;
 
       // 20–25% chance to place telegram first
-      if (telegramBtn && chance <= 0.20) {
+      if (telegramBtn && chance <= 0.10) {
         const shuffledOthers = fisherYatesShuffle(others);
         shuffled = [telegramBtn, ...shuffledOthers];
       } else {
