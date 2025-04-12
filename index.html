@@ -68,7 +68,7 @@
     }
     
     h2 {
-      color: white;
+      color: Red;
       margin-bottom: 30px;
     }
     
@@ -103,18 +103,23 @@
 
   const buttons = [];
 
-  // If telegramLink is provided, add the telegram button
   if (telegramLink) {
     buttons.push({ type: "telegram", url: telegramLink });
   }
   
-  // Add ad buttons
   adLinks.forEach(link => {
     buttons.push({ type: "ad", url: link });
   });
 
-  // Shuffle the buttons
-  const shuffled = buttons.sort(() => 0.5 - Math.random());
+  // Use unique key based on telegramLink
+  const storageKey = "shuffledButtons_" + encodeURIComponent(telegramLink || "noLink");
+
+  let shuffled = JSON.parse(localStorage.getItem(storageKey));
+
+  if (!shuffled) {
+    shuffled = buttons.sort(() => 0.5 - Math.random());
+    localStorage.setItem(storageKey, JSON.stringify(shuffled));
+  }
 
   const container = document.getElementById("buttonContainer");
 
@@ -132,6 +137,7 @@
     container.appendChild(button);
   });
 </script>
+
 
 </body>
 </html>
