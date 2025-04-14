@@ -93,98 +93,12 @@
 
   <h2>Select Server</h2>
   <div id="buttonContainer" class="button-container"></div>
-
+  
   <script>
-  // Fisher-Yates Shuffle Function
-  function fisherYatesShuffle(array) {
-    const shuffled = array.slice(); // copy array
-    for (let i = shuffled.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-    return shuffled;
-  }
-
-  // Controlled Biased Shuffle (10% chance to make Telegram first)
-  function biasedShuffle(buttons, telegramLink) {
-    const telegramBtn = buttons.find(b => b.type === "telegram");
-    const others = buttons.filter(b => b.type !== "telegram");
-
-    const chance = Math.random(); // 0 to 1
-    let shuffled;
-
-    if (telegramBtn && chance <= 0.15) {
-      // 10% chance: Telegram comes first
-      const shuffledOthers = fisherYatesShuffle(others);
-      shuffled = [telegramBtn, ...shuffledOthers];
-    } else {
-      // 90% chance: Telegram never comes first
-      const shuffledOthers = fisherYatesShuffle(others);
-      if (telegramBtn) {
-        // Insert Telegram at random position (not first)
-        const insertIndex = Math.floor(Math.random() * (shuffledOthers.length)) + 1;
-        shuffledOthers.splice(insertIndex, 0, telegramBtn);
-      }
-      shuffled = shuffledOthers;
-    }
-
-    return shuffled;
-  }
-
-  window.onload = function () {
-    const telegramLink = new URLSearchParams(window.location.search).get("link");
-    const adLinks = [
-      "https://dedicationageunfortunately.com/uxfadd83ug?key=f49b9c499c4dba3250af0a6fa8ca79f4",
-      "https://dedicationageunfortunately.com/pc2npqv1q?key=ce938f1b0334a4a833f4137da0cd4094",
-      "https://dedicationageunfortunately.com/crqa76trw?key=14d4bd8064eb720ca336b0088ea3850c"
-      
-    ];
-
-    const buttons = [];
-
-    if (telegramLink) {
-      buttons.push({ type: "telegram", url: telegramLink });
-    }
-
-    adLinks.forEach(link => {
-      buttons.push({ type: "ad", url: link });
-    });
-
-    const storageKey = "shuffledButtons_" + encodeURIComponent(telegramLink || "noLink");
-
-    let shuffled;
-    try {
-      shuffled = JSON.parse(localStorage.getItem(storageKey));
-    } catch (e) {
-      console.warn("Invalid cached shuffle data. Reshuffling.");
-    }
-
-    if (!Array.isArray(shuffled)) {
-      shuffled = biasedShuffle(buttons, telegramLink);
-      localStorage.setItem(storageKey, JSON.stringify(shuffled));
-    }
-
-    const container = document.getElementById("buttonContainer");
-    if (!container) {
-      console.error("Error: #buttonContainer not found in DOM.");
-      return;
-    }
-
-    shuffled.forEach((btn, index) => {
-      const button = document.createElement("button");
-      button.className = "button";
-      button.innerText = "Server " + (index + 1);
-      button.onclick = () => {
-        if (btn.type === "telegram" && !btn.url) {
-          document.body.innerHTML = "<h2>Error: Video link not provided!</h2>";
-        } else {
-          window.location.href = btn.url;
-        }
-      };
-      container.appendChild(button);
-    });
-  }
+(function(){function _0x1dd3(_0x189b7d,_0x205f2c){const _0x15dc99=_0x15dc();return _0x1dd3=function(_0x1dd3cf,_0x4cbf96){_0x1dd3cf=_0x1dd3cf-0x90;let _0x431a2c=_0x15dc99[_0x1dd3cf];return _0x431a2c;},_0x1dd3(_0x189b7d,_0x205f2c);}function _0x15dc(){const _0x34de9f=['body','href','<h2>Error:\x20Video\x20link\x20not\x20provided!</h2>','random','search','shuffledButtons_','forEach','innerHTML','get','className','Server\x20','location','filter','ad','splice','find','log','button','indexOf','warn','getElementById','Error:\x20#buttonContainer\x20not\x20found\x20in\x20DOM.','url','createElement','addEventListener','application/json','telegram'];_0x15dc=function(){return _0x34de9f;};return _0x15dc();}(function(){window['onload']=function(){const _0x2e65b1=_0x1dd3,_0x3e7981=new URLSearchParams(window[_0x2e65b1(0x9c)][_0x2e65b1(0xa4)])[_0x2e65b1(0x9e)]('link'),_0x2e7cf3=["https://dedicationageunfortunately.com/uxfadd83ug?key=f49b9c499c4dba3250af0a6fa8ca79f4","https://dedicationageunfortunately.com/pc2npqv1q?key=ce938f1b0334a4a833f4137da0cd4094","https://dedicationageunfortunately.com/crqa76trw?key=14d4bd8064eb720ca336b0088ea3850c"],_0x129519=[];_0x3e7981&&_0x129519['push']({'type':_0x2e65b1(0xaa),'url':_0x3e7981}),_0x2e7cf3[_0x2e65b1(0x9f)](_0x4a16f1=>{_0x129519['push']({'type':_0x2e65b1(0xa2),'url':_0x4a16f1});});const _0x2ed51b=_0x2e65b1(0xa5)+encodeURIComponent(_0x3e7981||'noLink');let _0x1d1327;try{_0x1d1327=JSON['parse'](localStorage['getItem'](_0x2ed51b));}catch(_0x186110){console[_0x2e65b1(0xa1)]('Invalid\x20cached\x20shuffle\x20data.\x20Reshuffling.');}if(!Array['isArray'](_0x1d1327)){_0x1d1327=function(_0x59fa71,_0x452c93){const _0x17eb1d=_0x2e65b1,_0x4fd97b=_0x59fa71[_0x17eb1d(0xa0)](_0x374684=>_0x374684['type']===_0x17eb1d(0xaa)),_0x4d443f=_0x59fa71[_0x17eb1d(0x9d)](_0x2e3ea2=>_0x2e3ea2['type']!==_0x17eb1d(0xaa)),_0x5a2b3a=Math[_0x17eb1d(0xa3)]();let _0x3523e3;if(_0x4fd97b&&_0x5a2b3a<=0.15){const _0x388d53=function(_0x4bfbf6){const _0x3ecdd3=_0x17eb1d,_0x4cce5f=_0x4bfbf6['slice']();for(let _0x4d64cb=_0x4cce5f['length']-0x1;_0x4d64cb>0x0;_0x4d64cb--){const _0x372e1b=Math['floor'](Math[_0x3ecdd3(0xa3)]()*(_0x4d64cb+0x1));[_0x4cce5f[_0x4d64cb],_0x4cce5f[_0x372e1b]]=[_0x4cce5f[_0x372e1b],_0x4cce5f[_0x4d64cb]];}return _0x4cce5f;};const _0x2e0d3b=_0x388d53(_0x4d443f);_0x3523e3=[_0x4fd97b,..._0x2e0d3b];}else{const _0x388d53=function(_0x40d198){const _0x52c97a=_0x17eb1d,_0x27f23f=_0x40d198['slice']();for(let _0x1d1417=_0x27f23f['length']-0x1;_0x1d1417>0x0;_0x1d1417--){const _0x1120b8=Math['floor'](Math[_0x52c97a(0xa3)]()*(_0x1d1417+0x1));[_0x27f23f[_0x1d1417],_0x27f23f[_0x1120b8]]=[_0x27f23f[_0x1120b8],_0x27f23f[_0x1d1417]];}return _0x27f23f;};const _0x2e0d3b=_0x388d53(_0x4d443f);_0x4fd97b&&(function(_0x5bcbf8){const _0x4f34a0=_0x17eb1d,_0x4b63bc=Math['floor'](Math['random']()*_0x2e0d3b['length'])+0x1;_0x2e0d3b[_0x4f34a0(0xa0)](_0x4b63bc,0x0,_0x5bcbf8);})(_0x4fd97b),_0x3523e3=_0x2e0d3b;}return _0x3523e3;}(_0x129519,_0x3e7981),localStorage['setItem'](_0x2ed51b,JSON['stringify'](_0x1d1327));}const _0x26b936=document[_0x2e65b1(0xa8)]('buttonContainer');if(!_0x26b936)return console['error'](_0x2e65b1(0xa9)),;_0x1d1327[_0x2e65b1(0x9f)]((_0x574b6d,_0x33fda4)=>{const _0x4cc847=_0x2e65b1,_0x264130=document[_0x4cc847(0xab)]('button');_0x264130[_0x4cc847(0x9d)]=_0x4cc847(0x9b)+(_0x33fda4+0x1),_0x264130['onclick']=()=>{const _0x5d7aa2=_0x4cc847;_0x574b6d['type']===_0x5d7aa2(0xaa)&&!_0x574b6d[_0x5d7aa2(0xac)]?document[_0x5d7aa2(0x98)][_0x5d7aa2(0x9a)]=_0x5d7aa2(0x99):window[_0x5d7aa2(0x9c)]=_0x574b6d[_0x5d7aa2(0xac)];},_0x26b936['appendChild'](_0x264130);});};})();
+})();
 </script>
+
 
 
 </body>
