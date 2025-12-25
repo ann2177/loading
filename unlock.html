@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Link Unlocker</title>
+  <title>Watch Now</title>
   <style>
     body {
-      font-family: 'Segoe UI', Arial, sans-serif;
+      font-family: Arial, sans-serif;
       background: #0f0f0f;
       color: #ffffff;
       display: flex;
@@ -14,79 +14,100 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      padding: 0 15px; /* Side margins for mobile */
+      padding: 0 15px; /* Mobile side margins */
     }
 
     .container {
-      background: #1a1a1a;
-      padding: 25px 15px;
+      background: #1c1c1c;
+      padding: 30px 20px;
       border-radius: 12px;
       width: 100%;
-      max-width: 340px; 
-      box-sizing: border-box;
+      max-width: 350px; 
+      box-sizing: border-box; /* Keeps padding inside */
       text-align: center;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
 
     h3 {
       font-weight: 400;
       margin-bottom: 20px;
-      line-height: 1.4;
-      font-size: 0.9rem;
+      line-height: 1.5;
+      font-size: 1rem;
     }
 
-    /* Fixed Button: Prevent elements going outside */
+    /* Fixed Button Container */
     .btn {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 12px 15px;
+      padding: 14px 18px;
       border-radius: 8px;
       margin-bottom: 20px;
       text-decoration: none;
       width: 100%;
-      box-sizing: border-box; /* Crucial: keeps padding inside */
-      gap: 8px;
+      box-sizing: border-box;
+      gap: 10px;
       font-weight: bold;
       border: none;
-      overflow: hidden; /* Keeps everything inside the rounded corners */
+      font-size: 1rem;
     }
 
-    .blue-btn { background: #007bff; color: white; cursor: pointer; }
-    .blue-btn.completed { background: #333; color: #666; cursor: default; }
-    
-    .green-btn { background: #222; color: #555; pointer-events: none; transition: 0.3s; }
-    .green-btn.active { background: #008000; color: white; pointer-events: auto; }
+    /* 1st Button (Blue) */
+    .unlock-btn {
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+    }
 
-    /* Text inside buttons: Shrinks to fit */
+    .completed {
+      background: #333;
+      color: #777;
+      cursor: default;
+    }
+
+    /* 2nd Button (Green) */
+    .go-btn {
+      background: #2a2a2a;
+      color: #555;
+      pointer-events: none;
+    }
+
+    .active {
+      background: #008000;
+      color: white;
+      pointer-events: auto;
+    }
+
+    /* Text Handling: Prevents going outside */
     .btn span:nth-child(2) {
-      font-size: 0.8rem; /* Smaller text to ensure it fits */
+      flex-grow: 1;
+      text-align: center;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      flex-grow: 1;
-      text-align: center;
+      font-size: 0.9rem;
     }
 
-    .icon { 
-      flex-shrink: 0; /* Prevents icons from squishing */
-      width: 20px; 
+    .icon {
+      flex-shrink: 0;
+      width: 20px;
       display: flex;
       justify-content: center;
     }
 
     /* Progress UI */
-    .status-text { font-size: 0.8rem; margin-bottom: 8px; font-weight: bold;}
+    .status-text { font-size: 0.85rem; margin-bottom: 10px; font-weight: bold; }
     .progress-bg { background: #333; height: 5px; border-radius: 3px; width: 100%; margin-bottom: 25px; }
-    .progress-fill { background: #007bff; height: 100%; width: 0%; transition: width 0.6s ease; }
+    .progress-fill { background: #007bff; height: 0%; width: 0%; transition: width 0.5s ease; }
   </style>
 </head>
 <body>
 
   <div class="container">
     <h3>Please Like and Subscribe to My Channel and Press the Bell Icon to Get New Video Updates<br>
-    <span style="color: #aaa; font-size: 0.75rem; display: block; margin-top: 5px;">Complete the actions and unlock the link</span></h3>
+    <span style="color: #aaa; font-size: 0.8rem;">Complete the actions and unlock the link</span></h3>
 
-    <div id="unlockBtn" class="btn blue-btn">
+    <div id="unlockBtn" class="btn unlock-btn">
       <span class="icon">🔗</span>
       <span>ක්ලික් කරලා බැක් වෙන්න</span>
       <span id="checkIcon" class="icon">❯</span>
@@ -95,7 +116,7 @@
     <div class="status-text">Steps Completed <span id="stepCount">0</span>/ 1</div>
     <div class="progress-bg"><div id="progressFill" class="progress-fill"></div></div>
 
-    <a href="#" id="goBtn" class="btn green-btn">
+    <a href="#" id="goBtn" class="btn go-btn">
       <span class="icon">🔗</span>
       <span>Get Your Link</span>
       <span class="icon">❯</span>
@@ -103,49 +124,57 @@
   </div>
 
   <script>
-    const adUrl = "https://otieu.com/4/10203280";
     const params = new URLSearchParams(window.location.search);
     const telegramLink = params.get("link");
 
-    // ERROR HANDLING: If no link is provided, show error
-    if (!telegramLink) {
-        document.body.innerHTML = "<div class='container'>Invalid Link Parameter</div>";
+    // Validation
+    if (!telegramLink || !telegramLink.startsWith("https://t.me/")) {
+      document.querySelector('.container').innerHTML = "<h3>Invalid Telegram link</h3>";
+      throw new Error("Invalid link");
     }
 
-    // 1. UNIQUE STORAGE KEY: Specific to the 'link' parameter
-    const storageKey = "unlocked_" + btoa(telegramLink).substring(0, 16);
-
+    // Elements
     const unlockBtn = document.getElementById("unlockBtn");
     const goBtn = document.getElementById("goBtn");
     const progressFill = document.getElementById("progressFill");
     const stepCount = document.getElementById("stepCount");
     const checkIcon = document.getElementById("checkIcon");
 
-    function setAsUnlocked() {
+    // UNIQUE storage key PER LINK (Your original logic)
+    const storageKey = "unlocked_" + btoa(telegramLink);
+
+    function unlockNow() {
+      // 1st Button Styling
       unlockBtn.classList.add("completed");
-      unlockBtn.style.pointerEvents = "none";
       checkIcon.innerHTML = "✔";
       checkIcon.style.color = "#00c853";
+
+      // Progress Styling
       stepCount.innerText = "1";
       progressFill.style.width = "100%";
+
+      // 2nd Button Styling
       goBtn.classList.add("active");
       goBtn.href = telegramLink;
     }
 
-    // 2. CHECK ON LOAD: Only unlocks for this specific URL
+    // Check permanent unlock for this specific URL on load
     if (localStorage.getItem(storageKey) === "true") {
-      setAsUnlocked();
+      unlockNow();
     }
 
+    // Unlock button
     unlockBtn.addEventListener("click", () => {
-      // Open Pop-under
-      window.open(adUrl, "_blank");
+      if (localStorage.getItem(storageKey) === "true") return;
+
+      // Pop-under ad
+      window.open("https://otieu.com/4/10203280", "_blank");
       window.focus();
 
-      // 3. SAVE ONLY FOR THIS URL
+      // Save for this specific URL
       localStorage.setItem(storageKey, "true");
 
-      setAsUnlocked();
+      unlockNow();
     });
   </script>
 </body>
