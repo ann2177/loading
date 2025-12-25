@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Watch Now</title>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .box {
+      text-align: center;
+      background: #1c1c1c;
+      padding: 30px;
+      border-radius: 12px;
+      width: 320px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+
+    .unlock {
+      background: #ff9800;
+      color: #000;
+    }
+
+    .locked {
+      background: #555;
+      color: #ccc;
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .unlocked {
+      background: #00c853;
+      color: #000;
+      opacity: 1;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="box">
+    <h2>Watch Video</h2>
+
+    <button id="unlockBtn" class="unlock">
+      Unlock Link
+    </button>
+
+    <button id="goBtn" class="locked">
+      Open Telegram
+    </button>
+  </div>
+
+  <script>
+    // Read link from URL
+    const params = new URLSearchParams(window.location.search);
+    const telegramLink = params.get("link");
+
+    if (!telegramLink || !telegramLink.startsWith("https://t.me/")) {
+      alert("Invalid Telegram link");
+      throw new Error("Invalid link");
+    }
+
+    const unlockBtn = document.getElementById("unlockBtn");
+    const goBtn = document.getElementById("goBtn");
+
+    // Unique storage key PER LINK
+    const storageKey = "unlocked_" + btoa(telegramLink);
+
+    // Check permanent unlock
+    if (localStorage.getItem(storageKey) === "true") {
+      unlockNow();
+    }
+
+    // Unlock button
+    unlockBtn.addEventListener("click", () => {
+      // OPTIONAL: open ad
+      window.open("https://example-ads-link.com", "_blank");
+
+      // Save permanent unlock
+      localStorage.setItem(storageKey, "true");
+
+      unlockNow();
+    });
+
+    // Open Telegram
+    goBtn.addEventListener("click", () => {
+      window.location.href = telegramLink;
+    });
+
+    function unlockNow() {
+      goBtn.classList.remove("locked");
+      goBtn.classList.add("unlocked");
+      unlockBtn.style.display = "none";
+    }
+  </script>
+</body>
+</html>
