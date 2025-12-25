@@ -66,7 +66,6 @@
 
     .icon { flex-shrink: 0; width: 20px; display: flex; justify-content: center; }
 
-    /* Progress UI - Fixed */
     .status-text { font-size: 0.85rem; margin-bottom: 10px; font-weight: bold; }
     .progress-bg { 
       background: #333; 
@@ -74,86 +73,92 @@
       border-radius: 10px; 
       width: 100%; 
       margin-bottom: 25px; 
-      overflow: hidden; /* Ensures fill stays inside rounded corners */
+      overflow: hidden; 
     }
     .progress-fill { 
       background: #008000; 
       height: 100%; 
-      width: 0%; /* Initial state */
-      transition: width 2.1s ease-in-out; /* This creates the animation */
+      width: 0%; 
+      transition: width 0.5s ease-in-out; 
     }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h3>Join our group and turn on notifications for latest updates!<br>
-    <span style="color: #aaa; font-size: 0.8rem;">Complete the actions and unlock the link</span></h3>
+    <div id="content">
+        <h3>Join our group and turn on notifications for latest updates!<br>
+        <span style="color: #aaa; font-size: 0.8rem;">Complete the actions and unlock the link</span></h3>
 
-    <div id="unlockBtn" class="btn unlock-btn">
-      <span class="icon">🔗</span>
-      <span>ක්ලික් කරලා බැක් වෙන්න</span>
-      <span id="checkIcon" class="icon">❯</span>
+        <div id="unlockBtn" class="btn unlock-btn">
+          <span class="icon">🔗</span>
+          <span>ක්ලික් කරලා බැක් වෙන්න</span>
+          <span id="checkIcon" class="icon">❯</span>
+        </div>
+
+        <div class="status-text">Steps Completed <span id="stepCount">0</span>/ 1</div>
+        <div class="progress-bg">
+          <div id="progressFill" class="progress-fill"></div>
+        </div>
+
+        <a href="#" id="goBtn" class="btn go-btn">
+          <span class="icon">🔗</span>
+          <span>Join</span>
+          <span id="goIcon" class="icon">❯</span>
+        </a>
     </div>
-
-    <div class="status-text">Steps Completed <span id="stepCount">0</span>/ 1</div>
-    <div class="progress-bg">
-      <div id="progressFill" class="progress-fill"></div>
-    </div>
-
-    <a href="#" id="goBtn" class="btn go-btn">
-      <span class="icon">🔗</span>
-      <span>Join</span>
-      <span class="icon">❯</span>
-    </a>
   </div>
 
   <script>
+    // 1. Get the raw link and DECODE it
     const params = new URLSearchParams(window.location.search);
-    const telegramLink = params.get("link");
+    const rawLink = params.get("link");
+    const telegramLink = rawLink ? decodeURIComponent(rawLink) : null;
 
-    if (!telegramLink || !telegramLink.startsWith("https://t.me/")) {
-      document.querySelector('.container').innerHTML = "<h3>Invalid link</h3>";
-      throw new Error("Invalid link");
+    // Validation: Check if it's a valid Telegram link
+    if (!telegramLink || (!telegramLink.startsWith("https://t.me/") && !telegramLink.startsWith("http://t.me/"))) {
+      document.getElementById('content').innerHTML = "<h3>Invalid or missing link</h3>";
+    } else {
+      const unlockBtn = document.getElementById("unlockBtn");
+      const goBtn = document.getElementById("goBtn");
+      const progressFill = document.getElementById("progressFill");
+      const stepCount = document.getElementById("stepCount");
+      const checkIcon = document.getElementById("checkIcon");
+
+      // Use a safe key for localStorage (Base64 of the link)
+      const storageKey = "unlocked_" + btoa(telegramLink).substring(0, 16);
+
+      function unlockNow() {
+        unlockBtn.classList.add("completed");
+        unlockBtn.style.pointerEvents = "none";
+        checkIcon.innerHTML = "✔";
+        checkIcon.style.color = "#00c853";
+
+        stepCount.innerText = "1";
+        progressFill.style.width = "100%"; 
+
+        goBtn.classList.add("active");
+        goBtn.href = telegramLink; // The decoded link is now safely applied
+      }
+
+      // Check if already unlocked
+      if (localStorage.getItem(storageKey) === "true") {
+        unlockNow();
+      }
+
+      unlockBtn.addEventListener("click", () => {
+        if (localStorage.getItem(storageKey) === "true") return;
+
+        // Open your ad link
+        window.open("https://otieu.com/4/10203280", "_blank");
+        
+        // Short delay to simulate checking before unlocking
+        setTimeout(() => {
+            localStorage.setItem(storageKey, "true");
+            unlockNow();
+        }, 500);
+      });
     }
-
-    const unlockBtn = document.getElementById("unlockBtn");
-    const goBtn = document.getElementById("goBtn");
-    const progressFill = document.getElementById("progressFill");
-    const stepCount = document.getElementById("stepCount");
-    const checkIcon = document.getElementById("checkIcon");
-
-    const storageKey = "unlocked_" + btoa(telegramLink);
-
-    function unlockNow() {
-      // Update Button 1
-      unlockBtn.classList.add("completed");
-      checkIcon.innerHTML = "✔";
-      checkIcon.style.color = "#00c853";
-
-      // Update Progress Bar (The Fix)
-      stepCount.innerText = "1";
-      progressFill.style.width = "100%"; 
-
-      // Update Button 2
-      goBtn.classList.add("active");
-      goBtn.href = telegramLink;
-    }
-
-    // Check on page load
-    if (localStorage.getItem(storageKey) === "true") {
-      unlockNow();
-    }
-
-    unlockBtn.addEventListener("click", () => {
-      if (localStorage.getItem(storageKey) === "true") return;
-
-      window.open("https://otieu.com/4/10203280", "_blank");
-      window.focus();
-
-      localStorage.setItem(storageKey, "true");
-      unlockNow();
-    });
   </script>
 </body>
 </html>
