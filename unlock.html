@@ -6,7 +6,7 @@
   <title>Link Unlocker</title>
   <style>
     body {
-      font-family: 'Segoe UI', Helvetica, Arial, sans-serif;
+      font-family: 'Segoe UI', Arial, sans-serif;
       background: #0f0f0f;
       color: #ffffff;
       display: flex;
@@ -14,127 +14,81 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      padding: 0 20px; /* Crucial for side margins on mobile */
+      padding: 0 15px; /* Side margins for mobile */
     }
 
     .container {
-      text-align: center;
       background: #1a1a1a;
-      padding: 30px 20px;
+      padding: 25px 15px;
       border-radius: 12px;
       width: 100%;
-      max-width: 360px; /* Keeps content compact */
+      max-width: 340px; 
       box-sizing: border-box;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      text-align: center;
     }
 
     h3 {
       font-weight: 400;
       margin-bottom: 20px;
-      line-height: 1.5;
-      font-size: 1rem;
-      color: #f1f1f1;
+      line-height: 1.4;
+      font-size: 0.9rem;
     }
 
-    .sub-text {
-      display: block;
-      margin-top: 8px;
-      color: #aaa;
-      font-size: 0.85rem;
-    }
-
-    /* Step Button (Blue) */
-    .action-btn {
-      background: #007bff;
-      color: white;
+    /* Fixed Button: Elements stay inside */
+    .btn {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 14px 18px;
+      padding: 12px 15px;
       border-radius: 8px;
-      font-size: 1.1rem;
-      font-weight: bold;
-      margin-bottom: 25px;
-      cursor: pointer;
-      border: none;
+      margin-bottom: 20px;
+      text-decoration: none;
       width: 100%;
-      transition: background 0.3s;
+      box-sizing: border-box;
+      gap: 10px;
+      font-weight: bold;
+      border: none;
     }
 
-    .action-btn.completed {
-      background: #333;
-      color: #666;
-      cursor: default;
+    .blue-btn { background: #007bff; color: white; cursor: pointer; }
+    .blue-btn.completed { background: #333; color: #666; cursor: default; }
+    
+    .green-btn { background: #333; color: #666; pointer-events: none; transition: 0.3s; }
+    .green-btn.active { background: #008000; color: white; pointer-events: auto; }
+
+    /* Text inside buttons */
+    .btn span:nth-child(2) {
+      font-size: 0.85rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-grow: 1;
     }
+
+    .icon { flex-shrink: 0; width: 18px; }
 
     /* Progress UI */
-    .status-text {
-      font-size: 0.85rem;
-      font-weight: bold;
-      margin-bottom: 10px;
-      text-align: center;
-    }
-
-    .progress-bg {
-      background: #333;
-      height: 5px;
-      border-radius: 3px;
-      width: 100%;
-      margin-bottom: 30px;
-    }
-
-    .progress-fill {
-      background: #007bff;
-      height: 100%;
-      width: 0%;
-      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    /* Final Link Button (Green) */
-    .get-link-btn {
-      background: #2a2a2a;
-      color: #555;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 18px;
-      border-radius: 8px;
-      text-decoration: none;
-      font-size: 1.1rem;
-      font-weight: bold;
-      pointer-events: none;
-      transition: all 0.3s ease;
-    }
-
-    .get-link-btn.active {
-      background: #008000;
-      color: white;
-      pointer-events: auto;
-    }
-
-    .icon { font-size: 1.1rem; }
+    .status-text { font-size: 0.8rem; margin-bottom: 8px; }
+    .progress-bg { background: #333; height: 4px; border-radius: 2px; width: 100%; margin-bottom: 25px; }
+    .progress-fill { background: #007bff; height: 100%; width: 0%; transition: width 0.5s; }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <h3>
-      Please Like and Subscribe to My Channel and Press the Bell Icon to Get New Video Updates
-      <span class="sub-text">Complete the actions and unlock the link</span>
-    </h3>
+    <h3>Please Like and Subscribe to My Channel and Press the Bell Icon to Get New Video Updates<br>
+    <span style="color: #aaa; font-size: 0.8rem;">Complete the actions and unlock the link</span></h3>
 
-    <div id="unlockBtn" class="action-btn">
+    <div id="unlockBtn" class="btn blue-btn">
       <span class="icon">🔗</span>
       <span>ක්ලික් කරලා බැක් වෙන්න</span>
       <span id="checkIcon" class="icon">❯</span>
     </div>
 
     <div class="status-text">Steps Completed <span id="stepCount">0</span>/ 1</div>
-    <div class="progress-bg">
-      <div id="progressFill" class="progress-fill"></div>
-    </div>
+    <div class="progress-bg"><div id="progressFill" class="progress-fill"></div></div>
 
-    <a href="#" id="goBtn" class="get-link-btn">
+    <a href="#" id="goBtn" class="btn green-btn">
       <span class="icon">🔗</span>
       <span>Get Your Link</span>
       <span class="icon">❯</span>
@@ -142,10 +96,12 @@
   </div>
 
   <script>
-    // 1. Configuration
     const adUrl = "https://otieu.com/4/10203280";
     const params = new URLSearchParams(window.location.search);
-    const destination = params.get("link") || "https://t.me/your_channel";
+    const telegramLink = params.get("link") || "https://t.me/example";
+
+    // Create a unique key for THIS specific link
+    const storageKey = "unlocked_" + btoa(telegramLink).substring(0, 16);
 
     const unlockBtn = document.getElementById("unlockBtn");
     const goBtn = document.getElementById("goBtn");
@@ -153,29 +109,34 @@
     const stepCount = document.getElementById("stepCount");
     const checkIcon = document.getElementById("checkIcon");
 
-    // 2. Click Handler
+    // FUNCTION: Apply the "Unlocked" state
+    function setAsUnlocked() {
+      unlockBtn.classList.add("completed");
+      checkIcon.innerHTML = "✔";
+      checkIcon.style.color = "#00c853";
+      stepCount.innerText = "1";
+      progressFill.style.width = "100%";
+      goBtn.classList.add("active");
+      goBtn.href = telegramLink;
+    }
+
+    // CHECK: Did this user already unlock this link before?
+    if (localStorage.getItem(storageKey) === "true") {
+      setAsUnlocked();
+    }
+
     unlockBtn.addEventListener("click", () => {
-      // Pop-under logic: Opens the ad in a new window
-      const popUnder = window.open(adUrl, "_blank");
-      
-      // Attempt to bring the current window back to focus (Works on many browsers)
+      if (localStorage.getItem(storageKey) === "true") return;
+
+      // Pop-under: Open ad
+      window.open(adUrl, "_blank");
       window.focus();
 
-      // UI Updates
-      setTimeout(() => {
-        // Change blue button to 'Completed' state
-        unlockBtn.classList.add("completed");
-        checkIcon.innerHTML = "✔";
-        checkIcon.style.color = "#00c853";
-        
-        // Fill progress bar
-        stepCount.innerText = "1";
-        progressFill.style.width = "100%";
+      // Remember the user
+      localStorage.setItem(storageKey, "true");
 
-        // Enable green button
-        goBtn.classList.add("active");
-        goBtn.href = destination;
-      }, 500); // Small delay to feel natural
+      // Update UI
+      setAsUnlocked();
     });
   </script>
 </body>
