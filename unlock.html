@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Watch Now</title>
+  <title>Join Now</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -53,7 +53,7 @@
     .completed { background: #333 !important; color: #777 !important; cursor: default; }
     
     .go-btn { background: #2a2a2a; color: #555; pointer-events: none; }
-    .active { background: #008000 !important; color: white !important; pointer-events: auto; }
+    .active { background: #007bff !important; color: white !important; pointer-events: auto; }
 
     .btn span:nth-child(2) {
       flex-grow: 1;
@@ -87,7 +87,7 @@
 <body>
 
   <div class="container">
-    <h3>Please Like and Subscribe to My Channel and Press the Bell Icon to Get New Video Updates<br>
+    <h3><br>
     <span style="color: #aaa; font-size: 0.8rem;">Complete the actions and unlock the link</span></h3>
 
     <div id="unlockBtn" class="btn unlock-btn">
@@ -103,7 +103,7 @@
 
     <a href="#" id="goBtn" class="btn go-btn">
       <span class="icon">🔗</span>
-      <span>Join Now</span>
+      <span>Join</span>
       <span class="icon">❯</span>
     </a>
   </div>
@@ -113,7 +113,7 @@
     const telegramLink = params.get("link");
 
     if (!telegramLink || !telegramLink.startsWith("https://t.me/")) {
-      document.querySelector('.container').innerHTML = "<h3>Invalid Telegram link</h3>";
+      document.querySelector('.container').innerHTML = "<h3>Invalid link</h3>";
       throw new Error("Invalid link");
     }
 
