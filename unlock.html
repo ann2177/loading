@@ -34,7 +34,7 @@
       font-size: 0.9rem;
     }
 
-    /* Fixed Button: Elements stay inside */
+    /* Fixed Button: Prevent elements going outside */
     .btn {
       display: flex;
       justify-content: space-between;
@@ -44,40 +44,47 @@
       margin-bottom: 20px;
       text-decoration: none;
       width: 100%;
-      box-sizing: border-box;
-      gap: 10px;
+      box-sizing: border-box; /* Crucial: keeps padding inside */
+      gap: 8px;
       font-weight: bold;
       border: none;
+      overflow: hidden; /* Keeps everything inside the rounded corners */
     }
 
     .blue-btn { background: #007bff; color: white; cursor: pointer; }
     .blue-btn.completed { background: #333; color: #666; cursor: default; }
     
-    .green-btn { background: #333; color: #666; pointer-events: none; transition: 0.3s; }
+    .green-btn { background: #222; color: #555; pointer-events: none; transition: 0.3s; }
     .green-btn.active { background: #008000; color: white; pointer-events: auto; }
 
-    /* Text inside buttons */
+    /* Text inside buttons: Shrinks to fit */
     .btn span:nth-child(2) {
-      font-size: 0.85rem;
+      font-size: 0.8rem; /* Smaller text to ensure it fits */
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       flex-grow: 1;
+      text-align: center;
     }
 
-    .icon { flex-shrink: 0; width: 18px; }
+    .icon { 
+      flex-shrink: 0; /* Prevents icons from squishing */
+      width: 20px; 
+      display: flex;
+      justify-content: center;
+    }
 
     /* Progress UI */
-    .status-text { font-size: 0.8rem; margin-bottom: 8px; }
-    .progress-bg { background: #333; height: 4px; border-radius: 2px; width: 100%; margin-bottom: 25px; }
-    .progress-fill { background: #007bff; height: 100%; width: 0%; transition: width 0.5s; }
+    .status-text { font-size: 0.8rem; margin-bottom: 8px; font-weight: bold;}
+    .progress-bg { background: #333; height: 5px; border-radius: 3px; width: 100%; margin-bottom: 25px; }
+    .progress-fill { background: #007bff; height: 100%; width: 0%; transition: width 0.6s ease; }
   </style>
 </head>
 <body>
 
   <div class="container">
     <h3>Please Like and Subscribe to My Channel and Press the Bell Icon to Get New Video Updates<br>
-    <span style="color: #aaa; font-size: 0.8rem;">Complete the actions and unlock the link</span></h3>
+    <span style="color: #aaa; font-size: 0.75rem; display: block; margin-top: 5px;">Complete the actions and unlock the link</span></h3>
 
     <div id="unlockBtn" class="btn blue-btn">
       <span class="icon">🔗</span>
@@ -98,9 +105,14 @@
   <script>
     const adUrl = "https://otieu.com/4/10203280";
     const params = new URLSearchParams(window.location.search);
-    const telegramLink = params.get("link") || "https://t.me/example";
+    const telegramLink = params.get("link");
 
-    // Create a unique key for THIS specific link
+    // ERROR HANDLING: If no link is provided, show error
+    if (!telegramLink) {
+        document.body.innerHTML = "<div class='container'>Invalid Link Parameter</div>";
+    }
+
+    // 1. UNIQUE STORAGE KEY: Specific to the 'link' parameter
     const storageKey = "unlocked_" + btoa(telegramLink).substring(0, 16);
 
     const unlockBtn = document.getElementById("unlockBtn");
@@ -109,9 +121,9 @@
     const stepCount = document.getElementById("stepCount");
     const checkIcon = document.getElementById("checkIcon");
 
-    // FUNCTION: Apply the "Unlocked" state
     function setAsUnlocked() {
       unlockBtn.classList.add("completed");
+      unlockBtn.style.pointerEvents = "none";
       checkIcon.innerHTML = "✔";
       checkIcon.style.color = "#00c853";
       stepCount.innerText = "1";
@@ -120,22 +132,19 @@
       goBtn.href = telegramLink;
     }
 
-    // CHECK: Did this user already unlock this link before?
+    // 2. CHECK ON LOAD: Only unlocks for this specific URL
     if (localStorage.getItem(storageKey) === "true") {
       setAsUnlocked();
     }
 
     unlockBtn.addEventListener("click", () => {
-      if (localStorage.getItem(storageKey) === "true") return;
-
-      // Pop-under: Open ad
+      // Open Pop-under
       window.open(adUrl, "_blank");
       window.focus();
 
-      // Remember the user
+      // 3. SAVE ONLY FOR THIS URL
       localStorage.setItem(storageKey, "true");
 
-      // Update UI
       setAsUnlocked();
     });
   </script>
