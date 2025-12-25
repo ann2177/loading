@@ -14,7 +14,7 @@
       align-items: center;
       height: 100vh;
       margin: 0;
-      padding: 0 15px; /* Mobile side margins */
+      padding: 0 15px;
     }
 
     .container {
@@ -23,19 +23,17 @@
       border-radius: 12px;
       width: 100%;
       max-width: 350px; 
-      box-sizing: border-box; /* Keeps padding inside */
+      box-sizing: border-box;
       text-align: center;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     }
 
     h3 {
       font-weight: 400;
       margin-bottom: 20px;
       line-height: 1.5;
-      font-size: 1rem;
+      font-size: 0.95rem;
     }
 
-    /* Fixed Button Container */
     .btn {
       display: flex;
       justify-content: space-between;
@@ -49,56 +47,41 @@
       gap: 10px;
       font-weight: bold;
       border: none;
-      font-size: 1rem;
     }
 
-    /* 1st Button (Blue) */
-    .unlock-btn {
-      background: #007bff;
-      color: white;
-      cursor: pointer;
-    }
+    .unlock-btn { background: #007bff; color: white; cursor: pointer; }
+    .completed { background: #333 !important; color: #777 !important; cursor: default; }
+    
+    .go-btn { background: #2a2a2a; color: #555; pointer-events: none; }
+    .active { background: #008000 !important; color: white !important; pointer-events: auto; }
 
-    .completed {
-      background: #333;
-      color: #777;
-      cursor: default;
-    }
-
-    /* 2nd Button (Green) */
-    .go-btn {
-      background: #2a2a2a;
-      color: #555;
-      pointer-events: none;
-    }
-
-    .active {
-      background: #008000;
-      color: white;
-      pointer-events: auto;
-    }
-
-    /* Text Handling: Prevents going outside */
     .btn span:nth-child(2) {
       flex-grow: 1;
       text-align: center;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
 
-    .icon {
-      flex-shrink: 0;
-      width: 20px;
-      display: flex;
-      justify-content: center;
-    }
+    .icon { flex-shrink: 0; width: 20px; display: flex; justify-content: center; }
 
-    /* Progress UI */
+    /* Progress UI - Fixed */
     .status-text { font-size: 0.85rem; margin-bottom: 10px; font-weight: bold; }
-    .progress-bg { background: #333; height: 5px; border-radius: 3px; width: 100%; margin-bottom: 25px; }
-    .progress-fill { background: #007bff; height: 0%; width: 0%; transition: width 0.5s ease; }
+    .progress-bg { 
+      background: #333; 
+      height: 6px; 
+      border-radius: 10px; 
+      width: 100%; 
+      margin-bottom: 25px; 
+      overflow: hidden; /* Ensures fill stays inside rounded corners */
+    }
+    .progress-fill { 
+      background: #007bff; 
+      height: 100%; 
+      width: 0%; /* Initial state */
+      transition: width 0.8s ease-in-out; /* This creates the animation */
+    }
   </style>
 </head>
 <body>
@@ -114,7 +97,9 @@
     </div>
 
     <div class="status-text">Steps Completed <span id="stepCount">0</span>/ 1</div>
-    <div class="progress-bg"><div id="progressFill" class="progress-fill"></div></div>
+    <div class="progress-bg">
+      <div id="progressFill" class="progress-fill"></div>
+    </div>
 
     <a href="#" id="goBtn" class="btn go-btn">
       <span class="icon">🔗</span>
@@ -127,53 +112,46 @@
     const params = new URLSearchParams(window.location.search);
     const telegramLink = params.get("link");
 
-    // Validation
     if (!telegramLink || !telegramLink.startsWith("https://t.me/")) {
       document.querySelector('.container').innerHTML = "<h3>Invalid Telegram link</h3>";
       throw new Error("Invalid link");
     }
 
-    // Elements
     const unlockBtn = document.getElementById("unlockBtn");
     const goBtn = document.getElementById("goBtn");
     const progressFill = document.getElementById("progressFill");
     const stepCount = document.getElementById("stepCount");
     const checkIcon = document.getElementById("checkIcon");
 
-    // UNIQUE storage key PER LINK (Your original logic)
     const storageKey = "unlocked_" + btoa(telegramLink);
 
     function unlockNow() {
-      // 1st Button Styling
+      // Update Button 1
       unlockBtn.classList.add("completed");
       checkIcon.innerHTML = "✔";
       checkIcon.style.color = "#00c853";
 
-      // Progress Styling
+      // Update Progress Bar (The Fix)
       stepCount.innerText = "1";
-      progressFill.style.width = "100%";
+      progressFill.style.width = "100%"; 
 
-      // 2nd Button Styling
+      // Update Button 2
       goBtn.classList.add("active");
       goBtn.href = telegramLink;
     }
 
-    // Check permanent unlock for this specific URL on load
+    // Check on page load
     if (localStorage.getItem(storageKey) === "true") {
       unlockNow();
     }
 
-    // Unlock button
     unlockBtn.addEventListener("click", () => {
       if (localStorage.getItem(storageKey) === "true") return;
 
-      // Pop-under ad
       window.open("https://otieu.com/4/10203280", "_blank");
       window.focus();
 
-      // Save for this specific URL
       localStorage.setItem(storageKey, "true");
-
       unlockNow();
     });
   </script>
