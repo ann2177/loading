@@ -47,17 +47,13 @@
       gap: 10px;
       font-weight: bold;
       border: none;
-      transition: all 0.2s ease;
     }
 
     .unlock-btn { background: #007bff; color: white; cursor: pointer; }
-    .unlock-btn:hover { background: #0069d9; }
-    
     .completed { background: #333 !important; color: #777 !important; cursor: default; }
     
     .go-btn { background: #2a2a2a; color: #555; pointer-events: none; }
     .active { background: #007bff !important; color: white !important; pointer-events: auto; }
-    .active:hover { background: #0069d9 !important; }
 
     .btn span:nth-child(2) {
       flex-grow: 1;
@@ -81,10 +77,10 @@
       overflow: hidden; 
     }
     .progress-fill { 
-      background: #00c853; 
+      background: #008000; 
       height: 100%; 
       width: 0%; 
-      transition: width 0.4s ease-in-out; 
+      transition: width 2.1s ease-in-out; 
     }
   </style>
 </head>
@@ -113,81 +109,68 @@
   </div>
 
   <script>
-    // --- FIXED URL PARSING LOGIC ---
+    // --- SMART URL PARSER START ---
     function getTelegramLink() {
-        const url = window.location.href;
-        const searchParams = window.location.search;
+        const query = window.location.search;
         
-        // Find where 'link=' starts
-        // We use [?&] to ensure we find 'link=' whether it's the first param (?) or later (&)
-        const regex = /[?&]link=/;
-        const match = searchParams.match(regex);
+        // 1. Find where "link=" starts
+        // We look for ?link= or &link=
+        const match = query.match(/[?&]link=/);
         
         if (!match) return null;
 
-        // Calculate the starting index of the actual link
-        // We look at the whole URL to be safe, or just the search string
-        const startIndex = url.indexOf(match[0]) + match[0].length;
-        
-        // Grab everything to the end of the string
-        let extractedLink = url.substring(startIndex);
+        // 2. Extract everything AFTER "link="
+        // This method ignores '&' separators that usually break the URL, 
+        // effectively treating the rest of the string as the value.
+        const startIndex = match.index + match[0].length;
+        let rawLink = query.substring(startIndex);
 
-        // Basic clean-up: if the link accidentally grabbed a hash # at the very end intended for the page
-        // strict telegram links usually don't have hashes unless intended
-        
-        // If the user encoded the link (standard practice), we decode it.
-        // If they pasted it raw (bad practice but common), we leave it raw.
-        // Check if it starts with "http" (raw) or something else.
-        if (!extractedLink.startsWith("http")) {
-            try {
-                extractedLink = decodeURIComponent(extractedLink);
-            } catch (e) {
-                console.log("Decoding failed, using raw string");
-            }
+        // 3. Decode handling
+        // We decode it to handle %20, %2B etc, BUT this method ensures 
+        // literal '+' symbols are preserved and not turned into spaces.
+        try {
+            return decodeURIComponent(rawLink);
+        } catch (e) {
+            return rawLink; // Return raw if decoding fails
         }
-
-        return extractedLink;
     }
+    // --- SMART URL PARSER END ---
 
     const telegramLink = getTelegramLink();
-    const container = document.querySelector('.container');
 
     // Validation
     if (!telegramLink || !telegramLink.startsWith("https://t.me/")) {
-      container.innerHTML = "<h3>Invalid or missing link</h3><p style='color:#777; font-size:0.8rem;'>Please ensure the URL contains ?link=https://t.me/...</p>";
+      document.querySelector('.container').innerHTML = "<h3>Invalid or missing link</h3>";
+      // Optional: console.log to debug what the script actually received
+      console.error("Script received invalid link:", telegramLink);
       throw new Error("Invalid link");
     }
 
-    // --- UI LOGIC ---
     const unlockBtn = document.getElementById("unlockBtn");
     const goBtn = document.getElementById("goBtn");
     const progressFill = document.getElementById("progressFill");
     const stepCount = document.getElementById("stepCount");
     const checkIcon = document.getElementById("checkIcon");
 
-    // Use a hash of the link to store progress (so different links have different progress)
-    const storageKey = "unlocked_" + btoa(telegramLink).substring(0, 16);
+    // Create a unique storage key based on the specific link
+    const storageKey = "unlocked_" + btoa(telegramLink);
 
     function unlockNow() {
       // Update Button 1
       unlockBtn.classList.add("completed");
-      unlockBtn.style.pointerEvents = "none"; // Stop extra clicks
       checkIcon.innerHTML = "✔";
       checkIcon.style.color = "#00c853";
-      
-      // Update Text inside Button 1 to show done
-      unlockBtn.querySelector("span:nth-child(2)").innerText = "Completed";
 
       // Update Progress Bar
       stepCount.innerText = "1";
       progressFill.style.width = "100%"; 
 
-      // Update Button 2 (Unlock it)
+      // Update Button 2
       goBtn.classList.add("active");
       goBtn.href = telegramLink;
     }
 
-    // Check on page load if already unlocked
+    // Check on page load
     if (localStorage.getItem(storageKey) === "true") {
       unlockNow();
     }
@@ -195,10 +178,11 @@
     unlockBtn.addEventListener("click", () => {
       if (localStorage.getItem(storageKey) === "true") return;
 
-      // Open the ad/link
+      // The ad link
       window.open("https://otieu.com/4/10203280", "_blank");
-      
-      // Mark as unlocked immediately
+      window.focus();
+
+      // Save state and unlock
       localStorage.setItem(storageKey, "true");
       unlockNow();
     });
