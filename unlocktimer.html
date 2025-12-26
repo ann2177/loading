@@ -108,43 +108,72 @@
     </a>
   </div>
 
- <script>
-/* Smart URL Parser & Ad Locker - Obfuscated */
-(function(w, d, adUrl) {
-    var q = w.location.search, m = q.match(/[?&]link=/);
-    if (!m) return;
-    var r = q.substring(m.index + m[0].length), t;
-    try { t = decodeURIComponent(r); } catch (e) { t = r; }
-    if (!t || !t.startsWith("https://t.me/")) {
-        d.querySelector('.container').innerHTML = "<h3>Invalid or missing link</h3>";
-        throw new Error("Inv");
-    }
-    var g = function(i) { return d.getElementById(i); },
-        b = g("unlockBtn"), bt = g("btnText"), go = g("goBtn"),
-        pf = g("progressFill"), sc = g("stepCount"), ci = g("checkIcon"),
-        k = "unlocked_" + btoa(t), ts = 0,
-        txt1 = "\u0D9A\u0DCA\u0DBD\u0DD2\u0D9A\u0DCA \u0D9A\u0DBB\u0DBD\u0DCF \u0DB6\u0DD0\u0D9A\u0DCA \u0DC0\u0EAB\u0DB1\u0DCA\u0DB1",
-        txt2 = "\u0DB6\u0DD0\u0D9A\u0DCA \u0DC0\u0EAB\u0DB1\u0DCA\u0DB1 \u0D9A\u0DBD\u0DD2\u0DB1\u0DCA \u0DAD\u0DAD\u0DCA\u0DB4\u0DBB 3\u0D9A\u0DCA \u0D89\u0DB1\u0DCA\u0DB1!";
+<script>
+(function(_w, _d) {
+    // --- CONFIGURATION ---
+    const _AD = "https://otieu.com/4/10203280";
+    const _TXT_1 = "ක්ලික් කරලා බැක් වෙන්න";
+    const _TXT_2 = "බැක් වෙන්න කලින් තත්පර 3ක් ඉන්න!";
+    const _TXT_WAIT = "Checking... ⏳";
+    // ---------------------
 
-    function ul() {
-        b.classList.add("completed"); b.style.pointerEvents = "none";
-        bt.innerText = txt1; ci.innerHTML = "\u2714"; ci.style.color = "#00c853";
-        sc.innerText = "1"; pf.style.width = "100%";
-        go.classList.add("active"); go.href = t;
-        localStorage.setItem(k, "1");
+    function _gU() {
+        var q = _w.location.search, m = q.match(/[?&]link=/);
+        if (!m) return null;
+        var r = q.substring(m.index + m[0].length);
+        try { return decodeURIComponent(r); } catch (e) { return r; }
     }
-    if (localStorage.getItem(k) === "1") ul();
-    b.addEventListener("click", function() {
-        if (localStorage.getItem(k) === "1") return;
-        ts = Date.now(); w.open(adUrl, "_blank");
-        bt.innerText = "Checking... \u23F3";
+
+    var _l = _gU();
+    if (!_l || !_l.startsWith("https://t.me/")) {
+        _d.querySelector('.container').innerHTML = "<h3>Invalid or missing link</h3>";
+        throw "Err";
+    }
+
+    var _e = {
+        u: _d.getElementById("unlockBtn"),
+        t: _d.getElementById("btnText"),
+        g: _d.getElementById("goBtn"),
+        p: _d.getElementById("progressFill"),
+        s: _d.getElementById("stepCount"),
+        c: _d.getElementById("checkIcon")
+    };
+
+    var _k = "unlocked_" + btoa(_l), _ts = 0;
+
+    function _ok() {
+        _e.u.classList.add("completed");
+        _e.u.style.pointerEvents = "none";
+        _e.t.innerText = _TXT_1;
+        _e.c.innerHTML = "✔";
+        _e.c.style.color = "#00c853";
+        _e.s.innerText = "1";
+        _e.p.style.width = "100%";
+        _e.g.classList.add("active");
+        _e.g.href = _l;
+        localStorage.setItem(_k, "1");
+    }
+
+    if (localStorage.getItem(_k) === "1") _ok();
+
+    _e.u.addEventListener("click", function() {
+        if (localStorage.getItem(_k) === "1") return;
+        _ts = Date.now();
+        _w.open(_AD, "_blank");
+        _e.t.innerText = _TXT_WAIT;
     });
-    w.addEventListener("focus", function() {
-        if (ts === 0 || localStorage.getItem(k) === "1") return;
-        if ((Date.now() - ts) / 1000 >= 3) { ul(); } 
-        else { bt.innerText = txt1; ts = 0; alert(txt2); }
+
+    _w.addEventListener("focus", function() {
+        if (_ts === 0 || localStorage.getItem(_k) === "1") return;
+        if ((Date.now() - _ts) / 1000 >= 3) {
+            _ok();
+        } else {
+            _e.t.innerText = _TXT_1;
+            _ts = 0;
+            alert(_TXT_2);
+        }
     });
-})(window, document, "https://otieu.com/4/10203280");
+})(window, document);
 </script>
 </body>
 </html>
