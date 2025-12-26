@@ -80,7 +80,7 @@
       background: #008000; 
       height: 100%; 
       width: 0%; 
-      transition: width 2.1s ease-in-out; 
+      transition: width 1.1s ease-in-out; 
     }
   </style>
 </head>
@@ -180,7 +180,7 @@
       const currentTime = Date.now();
       const timeSpent = (currentTime - clickTimestamp) / 1000; // Convert to seconds
 
-      if (timeSpent >= 5) {
+      if (timeSpent >= 3) {
         unlockNow();
       } else {
         // Reset and show popup
