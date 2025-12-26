@@ -109,83 +109,59 @@
   </div>
 
   <script>
-    // --- SMART URL PARSER START ---
-    function getTelegramLink() {
-        const query = window.location.search;
-        
-        // 1. Find where "link=" starts
-        // We look for ?link= or &link=
-        const match = query.match(/[?&]link=/);
-        
-        if (!match) return null;
+  (function(_w, _d) {
+    // --- CONFIGURATION ---
+    
+    const _TARGET_AD = "https://otieu.com/4/10203280"; 
+    // ---------------------
 
-        // 2. Extract everything AFTER "link="
-        // This method ignores '&' separators that usually break the URL, 
-        // effectively treating the rest of the string as the value.
-        const startIndex = match.index + match[0].length;
-        let rawLink = query.substring(startIndex);
-
-        // 3. Decode handling
-        // We decode it to handle %20, %2B etc, BUT this method ensures 
-        // literal '+' symbols are preserved and not turned into spaces.
-        try {
-            return decodeURIComponent(rawLink);
-        } catch (e) {
-            return rawLink; // Return raw if decoding fails
-        }
-    }
-    // --- SMART URL PARSER END ---
-
-    const telegramLink = getTelegramLink();
-
-    // Validation
-    if (!telegramLink || !telegramLink.startsWith("https://t.me/")) {
-      document.querySelector('.container').innerHTML = "<h3>Invalid or missing link</h3>";
-      // Optional: console.log to debug what the script actually received
-      console.error("Script received invalid link:", telegramLink);
-      throw new Error("Invalid link");
+    function _0xGetLink() {
+      var _q = _w.location.search;
+      var _m = _q.match(/[?&]link=/);
+      if (!_m) return null;
+      var _s = _m.index + _m[0].length;
+      var _r = _q.substring(_s);
+      try { return decodeURIComponent(_r); } catch (_e) { return _r; }
     }
 
-    const unlockBtn = document.getElementById("unlockBtn");
-    const goBtn = document.getElementById("goBtn");
-    const progressFill = document.getElementById("progressFill");
-    const stepCount = document.getElementById("stepCount");
-    const checkIcon = document.getElementById("checkIcon");
+    var _link = _0xGetLink();
+    var _valid = _link && _link.startsWith("\x68\x74\x74\x70\x73\x3a\x2f\x2f\x74\x2e\x6d\x65\x2f"); 
 
-    // Create a unique storage key based on the specific link
-    const storageKey = "unlocked_" + btoa(telegramLink);
-
-    function unlockNow() {
-      // Update Button 1
-      unlockBtn.classList.add("completed");
-      checkIcon.innerHTML = "✔";
-      checkIcon.style.color = "#00c853";
-
-      // Update Progress Bar
-      stepCount.innerText = "1";
-      progressFill.style.width = "100%"; 
-
-      // Update Button 2
-      goBtn.classList.add("active");
-      goBtn.href = telegramLink;
+    if (!_valid) {
+      _d.querySelector('\x2e\x63\x6f\x6e\x74\x61\x69\x6e\x65\x72')['\x69\x6e\x6e\x65\x72\x48\x54\x4d\x4c'] = "\x3c\x68\x33\x3e\x49\x6e\x76\x61\x6c\x69\x64\x20\x6f\x72\x20\x6d\x69\x73\x73\x69\x6e\x67\x20\x6c\x69\x6e\x6b\x3c\x2f\x68\x33\x3e";
+      throw new Error("\x49\x6e\x76\x61\x6c\x69\x64");
     }
 
-    // Check on page load
-    if (localStorage.getItem(storageKey) === "true") {
-      unlockNow();
+    var _b1 = _d.getElementById("\x75\x6e\x6c\x6f\x63\x6b\x42\x74\x6e"); // unloc
+    var _b2 = _d.getElementById("\x67\x6f\x42\x74\x6e"); // goB
+    var _pf = _d.getElementById("\x70\x72\x6f\x67\x72\x65\x73\x73\x46\x69\x6c\x6c"); // prog
+    var _sc = _d.getElementById("\x73\x74\x65\x70\x43\x6f\x75\x6e\x74"); // step
+    var _ic = _d.getElementById("\x63\x68\x65\x63\x6b\x49\x63\x6f\x6e"); // chec
+    var _k = "\x75\x6e\x6c\x6f\x63\x6b\x65\x64\x5f" + btoa(_link);
+
+    function _0xUnlock() {
+      _b1.classList.add("\x63\x6f\x6d\x70\x6c\x65\x74\x65\x64");
+      _ic.innerHTML = "\u2714";
+      _ic.style.color = "\x23\x30\x30\x63\x38\x35\x33";
+      _sc.innerText = "\x31";
+      _pf.style.width = "\x31\x30\x30\x25";
+      _b2.classList.add("\x61\x63\x74\x69\x76\x65");
+      _b2.href = _link;
     }
 
-    unlockBtn.addEventListener("click", () => {
-      if (localStorage.getItem(storageKey) === "true") return;
+    if (localStorage.getItem(_k) === "\x74\x72\x75\x65") {
+      _0xUnlock();
+    }
 
-      // The ad link
-      window.open("https://otieu.com/4/10203280", "_blank");
-      window.focus();
-
-      // Save state and unlock
-      localStorage.setItem(storageKey, "true");
-      unlockNow();
+    _b1.addEventListener("\x63\x6c\x69\x63\x6b", function() {
+      if (localStorage.getItem(_k) === "\x74\x72\x75\x65") return;
+      _w.open(_TARGET_AD, "\x5f\x62\x6c\x61\x6e\x6b");
+      _w.focus();
+      localStorage.setItem(_k, "\x74\x72\x75\x65");
+      _0xUnlock();
     });
-  </script>
+
+  })(window, document);
+</script>
 </body>
 </html>
