@@ -108,87 +108,43 @@
     </a>
   </div>
 
-  <script>
-    // --- SMART URL PARSER ---
-    function getTelegramLink() {
-        const query = window.location.search;
-        const match = query.match(/[?&]link=/);
-        if (!match) return null;
-        const startIndex = match.index + match[0].length;
-        let rawLink = query.substring(startIndex);
-        try {
-            return decodeURIComponent(rawLink);
-        } catch (e) {
-            return rawLink;
-        }
+ <script>
+/* Smart URL Parser & Ad Locker - Obfuscated */
+(function(w, d, adUrl) {
+    var q = w.location.search, m = q.match(/[?&]link=/);
+    if (!m) return;
+    var r = q.substring(m.index + m[0].length), t;
+    try { t = decodeURIComponent(r); } catch (e) { t = r; }
+    if (!t || !t.startsWith("https://t.me/")) {
+        d.querySelector('.container').innerHTML = "<h3>Invalid or missing link</h3>";
+        throw new Error("Inv");
     }
+    var g = function(i) { return d.getElementById(i); },
+        b = g("unlockBtn"), bt = g("btnText"), go = g("goBtn"),
+        pf = g("progressFill"), sc = g("stepCount"), ci = g("checkIcon"),
+        k = "unlocked_" + btoa(t), ts = 0,
+        txt1 = "\u0D9A\u0DCA\u0DBD\u0DD2\u0D9A\u0DCA \u0D9A\u0DBB\u0DBD\u0DCF \u0DB6\u0DD0\u0D9A\u0DCA \u0DC0\u0EAB\u0DB1\u0DCA\u0DB1",
+        txt2 = "\u0DB6\u0DD0\u0D9A\u0DCA \u0DC0\u0EAB\u0DB1\u0DCA\u0DB1 \u0D9A\u0DBD\u0DD2\u0DB1\u0DCA \u0DAD\u0DAD\u0DCA\u0DB4\u0DBB 3\u0D9A\u0DCA \u0D89\u0DB1\u0DCA\u0DB1!";
 
-    const telegramLink = getTelegramLink();
-
-    // Validation
-    if (!telegramLink || !telegramLink.startsWith("https://t.me/")) {
-      document.querySelector('.container').innerHTML = "<h3>Invalid or missing link</h3>";
-      throw new Error("Invalid link");
+    function ul() {
+        b.classList.add("completed"); b.style.pointerEvents = "none";
+        bt.innerText = txt1; ci.innerHTML = "\u2714"; ci.style.color = "#00c853";
+        sc.innerText = "1"; pf.style.width = "100%";
+        go.classList.add("active"); go.href = t;
+        localStorage.setItem(k, "1");
     }
-
-    const unlockBtn = document.getElementById("unlockBtn");
-    const btnText = document.getElementById("btnText");
-    const goBtn = document.getElementById("goBtn");
-    const progressFill = document.getElementById("progressFill");
-    const stepCount = document.getElementById("stepCount");
-    const checkIcon = document.getElementById("checkIcon");
-
-    const storageKey = "unlocked_" + btoa(telegramLink);
-    let clickTimestamp = 0; // Track when the user clicked
-
-    function unlockNow() {
-      unlockBtn.classList.add("completed");
-      unlockBtn.style.pointerEvents = "none"; // Disable clicking again
-      btnText.innerText = "ක්ලික් කරලා බැක් වෙන්න";
-      checkIcon.innerHTML = "✔";
-      checkIcon.style.color = "#00c853";
-
-      stepCount.innerText = "1";
-      progressFill.style.width = "100%"; 
-
-      goBtn.classList.add("active");
-      goBtn.href = telegramLink;
-      localStorage.setItem(storageKey, "true");
-    }
-
-    // Check if already unlocked on load
-    if (localStorage.getItem(storageKey) === "true") {
-      unlockNow();
-    }
-
-    unlockBtn.addEventListener("click", () => {
-      if (localStorage.getItem(storageKey) === "true") return;
-
-      // Start the timer and open ad
-      clickTimestamp = Date.now();
-      window.open("https://otieu.com/4/10203280", "_blank");
-      
-      // Visual feedback
-      btnText.innerText = "Checking... ⏳";
+    if (localStorage.getItem(k) === "1") ul();
+    b.addEventListener("click", function() {
+        if (localStorage.getItem(k) === "1") return;
+        ts = Date.now(); w.open(adUrl, "_blank");
+        bt.innerText = "Checking... \u23F3";
     });
-
-    // Detect when user returns to the page
-    window.addEventListener("focus", () => {
-      // If they haven't clicked yet or it's already unlocked, do nothing
-      if (clickTimestamp === 0 || localStorage.getItem(storageKey) === "true") return;
-
-      const currentTime = Date.now();
-      const timeSpent = (currentTime - clickTimestamp) / 1000; // Convert to seconds
-
-      if (timeSpent >= 3) {
-        unlockNow();
-      } else {
-        // Reset and show popup
-        btnText.innerText = "ක්ලික් කරලා බැක් වෙන්න";
-        clickTimestamp = 0; // Reset timer
-        alert("බැක් වෙන්න කලින් තත්පර 4ක් ඉන්න!");
-      }
+    w.addEventListener("focus", function() {
+        if (ts === 0 || localStorage.getItem(k) === "1") return;
+        if ((Date.now() - ts) / 1000 >= 3) { ul(); } 
+        else { bt.innerText = txt1; ts = 0; alert(txt2); }
     });
-  </script>
+})(window, document, "https://otieu.com/4/10203280");
+</script>
 </body>
 </html>
