@@ -26,6 +26,7 @@
             position: sticky;
             top: 0;
             z-index: 2000;
+            height: 65px; /* Fixed height for better sticky alignment */
         }
 
         .back-icon { margin-right: 20px; cursor: pointer; display: flex; align-items: center; }
@@ -68,7 +69,7 @@
         .dropdown-menu a:hover { background-color: #2b3949; }
         .show { display: block; }
 
-        /* --- PINNED NOTICE --- */
+        /* --- STICKY PINNED NOTICE --- */
         .pinned-notice {
             width: 100%;
             background-color: #1c2733; 
@@ -76,8 +77,11 @@
             box-sizing: border-box;
             display: flex;
             align-items: center;
-            position: relative;
+            position: sticky; /* Sticky positions the element relative to scroll */
+            top: 65px; /* Should match the height of tg-header */
+            z-index: 1000;
             border-bottom: 1px solid #0e1621;
+            cursor: default;
         }
         .pinned-line { width: 2px; background-color: #64b5f6; height: 32px; border-radius: 2px; margin-right: 12px; }
         .pinned-content { display: flex; flex-direction: column; overflow: hidden; }
@@ -171,7 +175,6 @@
             if (dropdown.classList.contains('show')) dropdown.classList.remove('show');
         });
 
-        // Report function
         function showReportMsg() {
             alert("බත් කාලා ඈ...");
         }
