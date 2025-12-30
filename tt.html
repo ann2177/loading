@@ -58,10 +58,12 @@
             border-radius: 8px;
             min-width: 160px;
             z-index: 2001;
+            padding: 4px 0;
         }
         .dropdown-menu a {
             color: white; padding: 12px 16px; text-decoration: none;
             display: block; font-size: 14px;
+            cursor: pointer;
         }
         .dropdown-menu a:hover { background-color: #2b3949; }
         .show { display: block; }
@@ -137,6 +139,7 @@
             </div>
             <div id="myDropdown" class="dropdown-menu">
                 <a href="https://t.me/telegramlinks" target="_blank">Join our Channel</a>
+                <a onclick="showReportMsg()">Report</a>
             </div>
         </div>
     </div>
@@ -168,6 +171,11 @@
             if (dropdown.classList.contains('show')) dropdown.classList.remove('show');
         });
 
+        // Report function
+        function showReportMsg() {
+            alert("බත් කාලා ඈ...");
+        }
+
         // --- Data Handling ---
         let links = [];
 
@@ -177,7 +185,6 @@
                 if (!response.ok) throw new Error('Network response was not ok');
                 links = await response.json();
                 
-                // Dropdown setup
                 const filter = document.getElementById('categoryFilter');
                 const cats = [...new Set(links.map(l => l.cat))];
                 cats.forEach(c => {
@@ -198,14 +205,10 @@
             const selectedCat = document.getElementById('categoryFilter').value;
             feed.innerHTML = '';
 
-            // Get unique dates from original data
             const dates = [...new Set(links.map(l => l.date))];
             
             dates.forEach(date => {
-                // 1. Links to display based on category filter
                 const displayLinks = links.filter(l => l.date === date && (selectedCat === 'all' || l.cat === selectedCat));
-                
-                // 2. Reference for fixed Time and Views (from original data)
                 const originalDayLinks = links.filter(l => l.date === date);
                 const firstOriginalItem = originalDayLinks[0];
 
@@ -224,7 +227,6 @@
                         `;
                     });
 
-                    // Use firstOriginalItem to keep time and views STABLE even after filtering
                     bubbleHTML += `
                         <div class="message-info">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.8;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
