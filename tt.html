@@ -155,52 +155,47 @@
     <div id="chat-feed"></div>
 
     <script>
-        // Menu Toggle
+        // --- Menu Logic ---
         const menuBtn = document.getElementById('menuBtn');
         const dropdown = document.getElementById('myDropdown');
         if (menuBtn) {
-            menuBtn.addEventListener('click', function(e) {
+            menuBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 dropdown.classList.toggle('show');
             });
         }
-        window.addEventListener('click', function() {
+        window.addEventListener('click', () => {
             if (dropdown.classList.contains('show')) dropdown.classList.remove('show');
         });
 
-        // Fetch Data and Render
+        // --- Data Handling ---
         let links = [];
 
         async function loadData() {
             try {
-                // data.json එකෙන් ලින්ක් ලබා ගැනීම
                 const response = await fetch('data.json');
+                if (!response.ok) throw new Error('Network response was not ok');
                 links = await response.json();
                 
-                // Dropdown එකට Categories ඇතුළත් කිරීම
-                populateCategories();
-                
+                // Dropdown setup
+                const filter = document.getElementById('categoryFilter');
+                const cats = [...new Set(links.map(l => l.cat))];
+                cats.forEach(c => {
+                    let opt = document.createElement('option');
+                    opt.value = c; opt.innerText = c;
+                    filter.appendChild(opt);
+                });
+
                 render();
             } catch (error) {
-                console.error("දත්ත ලබාගැනීමට නොහැකි විය:", error);
-                document.getElementById('chat-feed').innerHTML = "<p style='text-align:center; color:#7f91a4;'>දත්ත ලබාගැනීමේ දෝෂයක් පවතී.</p>";
+                console.error("Fetch error:", error);
+                document.getElementById('chat-feed').innerHTML = "<p style='color:#7f91a4; margin-top:20px;'>Error loading data.</p>";
             }
-        }
-
-        function populateCategories() {
-            const filter = document.getElementById('categoryFilter');
-            const cats = [...new Set(links.map(l => l.cat))];
-            cats.forEach(c => {
-                let opt = document.createElement('option');
-                opt.value = c; opt.innerText = c;
-                filter.appendChild(opt);
-            });
         }
 
         function render() {
             const feed = document.getElementById('chat-feed');
-            const filter = document.getElementById('categoryFilter');
-            const selectedCat = filter.value;
+            const selectedCat = document.getElementById('categoryFilter').value;
             feed.innerHTML = '';
 
             const dates = [...new Set(links.map(l => l.date))];
@@ -212,21 +207,26 @@
                     feed.innerHTML += `<div class="date-header">${date}</div>`;
                     
                     let bubbleHTML = '<div class="message-bubble">';
-                    const firstLink = dayLinks[0]; 
+                    const firstItem = dayLinks[0];
 
-                    dayLinks.forEach(link => {
-                        let displayUrl = link.url.includes("link=") ? link.url.split("link=")[1] : link.url;
+                    dayLinks.forEach(item => {
+                        // Extract real TG link from URL
+                        let tgPart = item.url.includes("link=") ? item.url.split("link=")[1] : item.url;
+                        
+                        // Break the display link by removing last 2 characters
+                        let brokenDisplay = tgPart.slice(0, -2);
+
                         bubbleHTML += `
-                            <span class="cat-title">${link.title} ${link.emojis}</span>
-                            <a href="${link.url}" class="tg-link" target="_blank">${displayUrl}</a>
+                            <span class="cat-title">${item.title} ${item.emojis}</span>
+                            <a href="${item.url}" class="tg-link" target="_blank">${brokenDisplay}</a>
                         `;
                     });
 
                     bubbleHTML += `
                         <div class="message-info">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.8;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                            <span>${firstLink.views}</span>
-                            <span style="margin-left: 4px;">${firstLink.time}</span>
+                            <span>${firstItem.views}</span>
+                            <span style="margin-left: 4px;">${firstItem.time}</span>
                         </div>
                     `;
 
@@ -237,8 +237,7 @@
         }
 
         function filterContent() { render(); }
-
-        // Start loading
+        
         loadData();
     </script>
 </body>
