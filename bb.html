@@ -158,7 +158,7 @@
             bottom: 6px;
         }
 
-        /* --- SMART HIDING BOTTOM BAR --- */
+        /* --- BOTTOM BAR --- */
         .bottom-bar {
             position: fixed;
             bottom: 0;
@@ -171,13 +171,14 @@
             box-sizing: border-box;
             z-index: 3000;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
-            /* Smooth slide effect */
+            /* බාර් එක ආරම්භයේදී සඟවා තබමු (ඉහළටම ගිය විට සැඟවීමට) */
+            transform: translateY(100%);
             transition: transform 0.3s ease-in-out;
         }
 
-        /* Class to hide the bar */
-        .bottom-bar--hidden {
-            transform: translateY(100%);
+        /* Bar එක පෙන්වීමට අවශ්‍ය වූ විට */
+        .bottom-bar--visible {
+            transform: translateY(0);
         }
 
         .bottom-icon {
@@ -253,20 +254,17 @@
         <div class="bottom-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
         </div>
-
         <div class="filter-wrapper">
             <select id="categoryFilter" class="join-btn-select" onchange="filterContent()">
                 <option value="all">Select Category (සියල්ල)</option>
             </select>
         </div>
-
         <div class="bottom-icon">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"></polyline><rect x="2" y="7" width="20" height="5"></rect><line x1="12" y1="22" x2="12" y2="7"></line><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path></svg>
         </div>
     </div>
 
     <script>
-        // --- Menu Logic ---
         const menuBtn = document.getElementById('menuBtn');
         const dropdown = document.getElementById('myDropdown');
         if (menuBtn) {
@@ -279,11 +277,8 @@
             if (dropdown.classList.contains('show')) dropdown.classList.remove('show');
         });
 
-        function showReportMsg() {
-            alert("බත් කාලා ඈ...");
-        }
+        function showReportMsg() { alert("බත් කාලා ඈ..."); }
 
-        // --- Data Handling ---
         let links = [];
 
         async function loadData() {
@@ -296,15 +291,13 @@
                 const cats = [...new Set(links.map(l => l.cat))];
                 cats.forEach(c => {
                     let opt = document.createElement('option');
-                    opt.value = c; 
-                    opt.innerText = c;
+                    opt.value = c; opt.innerText = c;
                     filter.appendChild(opt);
                 });
-
                 render();
             } catch (error) {
                 console.error("Fetch error:", error);
-                document.getElementById('chat-feed').innerHTML = "<p style='color:#7f91a4; margin-top:20px; align-self:center;'>Error loading data.</p>";
+                document.getElementById('chat-feed').innerHTML = "<p style='color:#7f91a4; align-self:center;'>Error loading data.</p>";
             }
         }
 
@@ -312,66 +305,60 @@
             const feed = document.getElementById('chat-feed');
             const selectedCat = document.getElementById('categoryFilter').value;
             feed.innerHTML = '';
-
             const dates = [...new Set(links.map(l => l.date))];
             
             dates.forEach(date => {
                 const displayLinks = links.filter(l => l.date === date && (selectedCat === 'all' || l.cat === selectedCat));
-
                 if (displayLinks.length > 0) {
                     feed.innerHTML += `<div class="date-header">${date}</div>`;
-                    
                     displayLinks.forEach(item => {
                         let tgPart = item.url.includes("link=") ? item.url.split("link=")[1] : item.url;
                         let brokenDisplay = tgPart.slice(0, -2);
-
-                        let bubbleHTML = `
+                        feed.innerHTML += `
                             <div class="message-bubble">
                                 <span class="channel-label">ටෙලිග්‍රෑම් ලින්ක් 🔗</span>
                                 <span class="cat-title">${item.title} ${item.emojis}</span>
                                 <a href="${item.url}" class="tg-link" target="_blank">${brokenDisplay}</a>
                                 <div class="message-info">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.8;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                    <span>${item.views}</span>
-                                    <span style="margin-left: 4px;">${item.time}</span>
+                                    <span>${item.views}</span><span style="margin-left: 4px;">${item.time}</span>
                                 </div>
-                            </div>
-                        `;
-                        feed.innerHTML += bubbleHTML;
+                            </div>`;
                     });
                 }
             });
-            window.scrollTo(0,0);
+            window.scrollTo({top: 0, behavior: 'smooth'});
         }
 
         function filterContent() { render(); }
 
-        // --- Smart Hide Bottom Bar Logic ---
+        // --- Logic: Hide on TOP and on Down Scroll ---
         let lastScrollY = window.scrollY;
         const bBar = document.getElementById('bottomBar');
 
         window.addEventListener('scroll', () => {
-            if (window.scrollY > lastScrollY && window.scrollY > 100) {
-                // Scrolling Down - Hide
-                bBar.classList.add('bottom-bar--hidden');
-            } else {
-                // Scrolling Up - Show
-                bBar.classList.add('bottom-bar--hidden'); // Keep hidden while scrolling up until logic fix
-                // Re-calculating to show only on clear Up scroll
-                if (lastScrollY - window.scrollY > 5) {
-                   bBar.classList.remove('bottom-bar--hidden');
-                }
+            const currentScrollY = window.scrollY;
+
+            // කොන්දේසිය 1: පිටුවේ ඉහළටම ගිය විට සැඟවීම (Top Hide)
+            if (currentScrollY <= 10) {
+                bBar.classList.remove('bottom-bar--visible');
+            } 
+            // කොන්දේසිය 2: පහළට ස්ක්‍රෝල් කරන විට සැඟවීම (Down Scroll Hide)
+            else if (currentScrollY > lastScrollY) {
+                bBar.classList.remove('bottom-bar--visible');
+            } 
+            // කොන්දේසිය 3: පිටුව මැදදී ඉහළට ස්ක්‍රෝල් කරන විට පෙන්වීම (Show on Up scroll)
+            else if (currentScrollY < lastScrollY) {
+                bBar.classList.add('bottom-bar--visible');
             }
-            // Always show at the very bottom or top
-            if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 2) {
-                bBar.classList.remove('bottom-bar--hidden');
-            }
-            if (window.scrollY < 10) {
-                bBar.classList.remove('bottom-bar--hidden');
+
+            // කොන්දේසිය 4: පිටුවේ අවසානයටම ගිය විට අනිවාර්යයෙන් පෙන්වීම
+            if ((window.innerHeight + currentScrollY) >= document.body.offsetHeight - 5) {
+                bBar.classList.add('bottom-bar--visible');
             }
             
-            lastScrollY = window.scrollY;
-        });
+            lastScrollY = currentScrollY;
+        }, { passive: true });
         
         loadData();
     </script>
