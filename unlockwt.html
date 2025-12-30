@@ -68,7 +68,7 @@
         .dropdown-menu a:hover { background-color: #2b3949; }
         .show { display: block; }
 
-        /* --- CARD STYLING --- */
+        /* --- CARD & BUTTONS --- */
         .page-wrapper {
             flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
             padding: 20px; box-sizing: border-box; margin-top: 40px; 
@@ -79,11 +79,6 @@
         }
         h3 { font-size: 16px; font-weight: 400; line-height: 1.6; margin-top: 0; margin-bottom: 25px; }
         .instruction { color: #7f91a4; font-size: 14px; display: block; margin-top: 8px; }
-
-        .bot-section { margin-top: 25px; text-align: center; width: 100%; max-width: 380px; }
-        .bot-text { color: #7f91a4; font-size: 14px; margin-bottom: 12px; }
-        .bot-btn { display: inline-flex; align-items: center; background-color: #2b5278; color: white; text-decoration: none; padding: 8px 20px; border-radius: 20px; font-size: 13px; }
-        .bot-btn span { margin-left: 6px; font-weight: bold; }
 
         .btn { display: flex; justify-content: space-between; align-items: center; padding: 15px 18px; border-radius: 12px; margin-bottom: 15px; text-decoration: none; width: 100%; box-sizing: border-box; font-weight: bold; }
         .unlock-btn { background: #0088cc; color: white; cursor: pointer; }
@@ -96,6 +91,11 @@
         .status-text { font-size: 13px; margin-bottom: 8px; color: #7f91a4; font-weight: bold; }
         .progress-bg { background: #0e1621; height: 8px; border-radius: 10px; width: 100%; margin-bottom: 25px; overflow: hidden; }
         .progress-fill { background: #40a7e3; height: 100%; width: 0%; transition: width 0.7s ease-in-out; }
+
+        .bot-section { margin-top: 25px; text-align: center; width: 100%; max-width: 380px; }
+        .bot-text { color: #7f91a4; font-size: 14px; margin-bottom: 12px; }
+        .bot-btn { display: inline-flex; align-items: center; background-color: #2b5278; color: white; text-decoration: none; padding: 8px 20px; border-radius: 20px; font-size: 13px; }
+        .bot-btn span { margin-left: 6px; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -115,7 +115,7 @@
             </div>
             <div id="myDropdown" class="dropdown-menu">
                 <a href="https://t.me/telegramlinks" target="_blank">Join our Channel</a>
-                <a onclick="showReportMsg()">Report</a>
+                <a onclick="alert('බත් කාලා ඈ...')">Report</a>
             </div>
         </div>
     </div>
@@ -123,11 +123,23 @@
     <div class="page-wrapper">
         <div class="unlock-card">
             <h3>Join our group for updates!<br><span class="instruction">පහත පියවර සම්පූර්ණ කර ලින්ක් එක ලබාගන්න.</span></h3>
-            <div id="unlockBtn" class="btn unlock-btn"><span class="icon">🔗</span><span id="btnText" class="btn-text">ක්ලික් කරලා බැක් වෙන්න</span><span id="checkIcon" class="icon">❯</span></div>
+            
+            <div id="unlockBtn" class="btn unlock-btn">
+                <span class="icon">🔗</span>
+                <span id="btnText" class="btn-text">ක්ලික් කරලා බැක් වෙන්න</span>
+                <span id="checkIcon" class="icon">❯</span>
+            </div>
+
             <div class="status-text">Steps Completed <span id="stepCount">0</span> / 1</div>
             <div class="progress-bg"><div id="progressFill" class="progress-fill"></div></div>
-            <a href="#" id="goBtn" class="btn go-btn"><span class="icon">🚀</span><span class="btn-text">Join Channel</span><span class="icon">❯</span></a>
+            
+            <a href="#" id="goBtn" class="btn go-btn">
+                <span class="icon">🚀</span>
+                <span class="btn-text">Join Channel</span>
+                <span class="icon">❯</span>
+            </a>
         </div>
+
         <div class="bot-section">
             <div class="bot-text">ඔයාගේ ලින්ක් එක අපිට එවන්න.</div>
             <a href="https://t.me/LinkDiary_bot" class="bot-btn" target="_blank">Send</span></a>
@@ -135,39 +147,45 @@
     </div>
 
 <script>
-    // MORE MENU LOGIC
+    // --- UI INTERACTION ---
     const menuBtn = document.getElementById('menuBtn');
     const dropdown = document.getElementById('myDropdown');
     if (menuBtn) {
-        menuBtn.addEventListener('click', function(e) {
+        menuBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             dropdown.classList.toggle('show');
         });
     }
-    window.addEventListener('click', function() {
-        if (dropdown.classList.contains('show')) dropdown.classList.remove('show');
-    });
+    window.onclick = () => { if(dropdown.classList.contains('show')) dropdown.classList.remove('show'); };
 
-    function showReportMsg() {
-        alert("Reported successfully!");
-    }
-
-    // UNLOCK LOGIC (REMOVED WAIT TIME)
+    // --- LOGIC (NO TIMER) ---
     (function(_w, _d) {
         const _AD = "https://otieu.com/4/10203280";
+
         function _gU() {
             var q = _w.location.search, m = q.match(/[?&]link=/);
             if (!m) return null;
             var r = q.substring(m.index + m[0].length);
             try { return decodeURIComponent(r); } catch (e) { return r; }
         }
+
         var _l = _gU();
+        // Validation: ensures link exists and starts with t.me
         if (!_l || !_l.startsWith("https://t.me/")) {
             _d.querySelector('.unlock-card').innerHTML = "<h3>Invalid or missing link</h3>";
-            throw "Err";
+            return;
         }
-        var _e = { u: _d.getElementById("unlockBtn"), t: _d.getElementById("btnText"), g: _d.getElementById("goBtn"), p: _d.getElementById("progressFill"), s: _d.getElementById("stepCount"), c: _d.getElementById("checkIcon") };
-        var _k = "unlocked_" + btoa(_l), _clicked = false;
+
+        var _e = { 
+            u: _d.getElementById("unlockBtn"), 
+            t: _d.getElementById("btnText"), 
+            g: _d.getElementById("goBtn"), 
+            p: _d.getElementById("progressFill"), 
+            s: _d.getElementById("stepCount"), 
+            c: _d.getElementById("checkIcon") 
+        };
+        
+        var _k = "unlocked_" + btoa(_l);
 
         function _ok() {
             _e.u.classList.add("completed"); 
@@ -182,20 +200,20 @@
             localStorage.setItem(_k, "1");
         }
 
+        // Restore state if already clicked before
         if (localStorage.getItem(_k) === "1") _ok();
 
+        // Main Action
         _e.u.addEventListener("click", function() {
             if (localStorage.getItem(_k) === "1") return;
-            _clicked = true; 
+            
+            // Open Ad in new tab
             _w.open(_AD, "_blank"); 
-            _e.t.innerText = "Checking... ⏳";
+            
+            // Unlock instantly (No waiting/timer)
+            _ok();
         });
 
-        _w.addEventListener("focus", function() {
-            if (_clicked && localStorage.getItem(_k) !== "1") { 
-                _ok(); 
-            }
-        });
     })(window, document);
 </script>
 </body>
