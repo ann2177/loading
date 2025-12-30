@@ -62,7 +62,7 @@
             justify-content: center;
             padding: 20px;
             box-sizing: border-box;
-            margin-top: 60px; /* Offset for fixed header */
+            margin-top: 40px; 
         }
 
         .unlock-card {
@@ -79,20 +79,32 @@
         h3 { font-size: 16px; font-weight: 400; line-height: 1.6; margin-top: 0; margin-bottom: 25px; }
         .instruction { color: #7f91a4; font-size: 14px; display: block; margin-top: 8px; }
 
-        /* --- BOT LINK SECTION BELOW CARD --- */
-        .bot-promo {
-            margin-top: 20px;
+        /* --- BOT SECTION BELOW CARD --- */
+        .bot-section {
+            margin-top: 25px;
             text-align: center;
-            font-size: 14px;
+            width: 100%;
+            max-width: 380px;
+        }
+        .bot-text {
             color: #7f91a4;
+            font-size: 14px;
+            margin-bottom: 12px;
         }
-        .bot-promo a {
-            color: #64b5f6;
+        .bot-btn {
+            display: inline-flex;
+            align-items: center;
+            background-color: #2b5278;
+            color: white;
             text-decoration: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 13px;
             font-weight: 500;
-            display: block;
-            margin-top: 5px;
+            transition: background 0.2s;
         }
+        .bot-btn:active { background-color: #1c3954; }
+        .bot-btn span { margin-left: 6px; font-weight: bold; }
 
         /* --- BUTTONS --- */
         .btn {
@@ -174,9 +186,11 @@
             </a>
         </div>
 
-        <div class="bot-promo">
-            ඔයාගේ ලින්ක් එක අපිට එවන්න
-            <a href="https://t.me/LinkDiary_bot" target="_blank">@LinkDiary_bot</a>
+        <div class="bot-section">
+            <div class="bot-text">ඔයාගේ ලින්ක් එක අපිට එවන්න</div>
+            <a href="https://t.me/LinkDiary_bot" class="bot-btn" target="_blank">
+                Send <span>@LinkDiary_bot</span>
+            </a>
         </div>
     </div>
 
