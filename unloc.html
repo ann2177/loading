@@ -57,10 +57,12 @@
         .page-wrapper {
             flex-grow: 1;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 20px;
             box-sizing: border-box;
+            margin-top: 60px; /* Offset for fixed header */
         }
 
         .unlock-card {
@@ -76,6 +78,21 @@
 
         h3 { font-size: 16px; font-weight: 400; line-height: 1.6; margin-top: 0; margin-bottom: 25px; }
         .instruction { color: #7f91a4; font-size: 14px; display: block; margin-top: 8px; }
+
+        /* --- BOT LINK SECTION BELOW CARD --- */
+        .bot-promo {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #7f91a4;
+        }
+        .bot-promo a {
+            color: #64b5f6;
+            text-decoration: none;
+            font-weight: 500;
+            display: block;
+            margin-top: 5px;
+        }
 
         /* --- BUTTONS --- */
         .btn {
@@ -155,6 +172,11 @@
                 <span class="btn-text">Join Channel</span>
                 <span class="icon">❯</span>
             </a>
+        </div>
+
+        <div class="bot-promo">
+            ඔයාගේ ලින්ක් එක අපිට එවන්න
+            <a href="https://t.me/LinkDiary_bot" target="_blank">@LinkDiary_bot</a>
         </div>
     </div>
 
