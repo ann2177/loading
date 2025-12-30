@@ -7,7 +7,7 @@
     <style>
         /* --- HOMEPAGE CONSISTENT DESIGN --- */
         html, body {
-            height: 100%; /* Full height focus */
+            height: 100%;
             margin: 0; padding: 0;
         }
 
@@ -21,6 +21,7 @@
             flex-direction: column;
         }
 
+        /* --- HEADER MATCHED TO HOMEPAGE --- */
         .tg-header {
             width: 100%;
             background-color: #17212b;
@@ -28,7 +29,7 @@
             display: flex;
             align-items: center;
             box-sizing: border-box;
-            position: fixed; /* Fixed to top without taking space in flex flow */
+            position: fixed;
             top: 0;
             z-index: 1000;
         }
@@ -45,15 +46,18 @@
             text-align: center; overflow: hidden; flex-shrink: 0;
         }
 
+        .channel-info { flex-grow: 1; }
         .channel-name { font-size: 18px; font-weight: 500; display: flex; align-items: center; }
+        .channel-name span { margin-left: 5px; font-size: 18px; }
+        .sub-count { font-size: 13px; color: #7f91a4; margin-top: 2px; }
 
-        /* --- PERFECT VERTICAL & HORIZONTAL CENTERING --- */
+        /* --- CENTERING LOGIC --- */
         .page-wrapper {
             flex-grow: 1;
             display: flex;
-            align-items: center; /* Vertical center */
-            justify-content: center; /* Horizontal center */
-            padding: 20px; /* Side margins for mobile */
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
             box-sizing: border-box;
         }
 
@@ -120,7 +124,8 @@
             <span style="color:#000">ටෙලිග්‍රෑම්<br>ලින්ක්</span>
         </div>
         <div class="channel-info">
-            <div class="channel-name">ටෙලිග්‍රෑම් ලින්ක් 🔗</div>
+            <div class="channel-name">ටෙලිග්‍රෑම් ලින්ක් <span>🔗</span></div>
+            <div class="sub-count">11.7K subscribers</div>
         </div>
     </div>
 
