@@ -28,26 +28,24 @@
             z-index: 1000;
         }
 
-        .back-icon { margin-right: 20px; cursor: pointer; }
-        
+        /* Profile Pic Left aligned now */
         .profile-pic {
-    width: 45px; 
-    height: 45px;
-    background-color: white;
-    border-radius: 50%;
-    margin-right: 15px;
-    display: flex; 
-    align-items: center; 
-    justify-content: center;
-    color: #0e1621; 
-    font-weight: bold; 
-    /* Reduced font size and added line-height for better fit */
-    font-size: 8px; 
-    line-height: 1.1;
-    text-align: center; 
-    overflow: hidden;
-    flex-shrink: 0; /* Prevents the circle from squishing on small screens */
-}
+            width: 45px; 
+            height: 45px;
+            background-color: white;
+            border-radius: 50%;
+            margin-right: 15px;
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            color: #0e1621; 
+            font-weight: bold; 
+            font-size: 8px; 
+            line-height: 1.1;
+            text-align: center; 
+            overflow: hidden;
+            flex-shrink: 0;
+        }
 
         .channel-info { flex-grow: 1; }
         .channel-name { 
@@ -56,68 +54,82 @@
         .channel-name span { margin-left: 5px; font-size: 18px; }
         .sub-count { font-size: 13px; color: #7f91a4; margin-top: 2px; }
 
-        .more-icon { margin-left: 10px; cursor: pointer; }
+        /* --- DROPDOWN MENU STYLE --- */
+        .menu-container {
+            position: relative;
+        }
 
-        /* Pinned Notification Message */
+        .more-icon { 
+            cursor: pointer; 
+            padding: 5px;
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background-color: #1c2938;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+            border-radius: 8px;
+            min-width: 160px;
+            z-index: 1001;
+            overflow: hidden;
+        }
+
+        .dropdown-menu a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+            transition: background 0.2s;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #2b3949;
+        }
+
+        /* Show menu class */
+        .show { display: block; }
+
+        /* --- PINNED MESSAGE STYLE --- */
         .pinned-notice {
             width: 100%;
-            background-color: #1c2938;
-            border-left: 3px solid #64b5f6; /* Telegram style accent */
-            color: #64b5f6;
-            padding: 8px 15px;
-            font-size: 14px;
+            background-color: #17212b;
+            padding: 6px 15px;
             box-sizing: border-box;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
+            position: relative;
+            border-bottom: 1px solid #0e1621;
         }
 
-        /* Filter Style */
-        .filter-container {
-            width: 90%; max-width: 450px; margin: 15px 0;
-        }
-        select {
-            width: 100%; padding: 12px;
-            background: #182533; color: white;
-            border: 1px solid #2b3949; border-radius: 8px;
-            font-size: 16px; outline: none;
+        .pinned-line {
+            width: 2px;
+            background-color: #64b5f6;
+            height: 32px;
+            border-radius: 2px;
+            margin-right: 12px;
         }
 
-        /* Message UI */
-        #chat-feed {
-            width: 95%; max-width: 450px;
-            display: flex; flex-direction: column; align-items: center;
-            padding-bottom: 50px;
-        }
+        .pinned-content { display: flex; flex-direction: column; }
+        .pinned-label { color: #64b5f6; font-size: 14px; font-weight: 500; margin-bottom: 1px; }
+        .pinned-text { color: #7f91a4; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        .date-header {
-            background: rgba(33, 45, 57, 0.9);
-            padding: 4px 15px; border-radius: 20px;
-            font-size: 13px; margin: 15px 0; color: #fff;
-        }
-
-        .message-bubble {
-            background-color: #182533;
-            padding: 12px 15px; border-radius: 12px;
-            width: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.3);
-            margin-bottom: 10px; box-sizing: border-box;
-        }
-
+        /* Filter & Chat Feed Styles */
+        .filter-container { width: 90%; max-width: 450px; margin: 15px 0; }
+        select { width: 100%; padding: 12px; background: #182533; color: white; border: 1px solid #2b3949; border-radius: 8px; font-size: 16px; outline: none; }
+        #chat-feed { width: 95%; max-width: 450px; display: flex; flex-direction: column; align-items: center; padding-bottom: 50px; }
+        .date-header { background: rgba(33, 45, 57, 0.9); padding: 4px 15px; border-radius: 20px; font-size: 13px; margin: 15px 0; color: #fff; }
+        .message-bubble { background-color: #182533; padding: 12px 15px; border-radius: 12px; width: 100%; box-shadow: 0 1px 2px rgba(0,0,0,0.3); margin-bottom: 10px; box-sizing: border-box; }
         .cat-title { font-size: 16px; font-weight: 500; display: block; margin-top: 10px; color: #fff; }
-        .cat-title:first-child { margin-top: 0; }
-        
-        .tg-link {
-            color: #64b5f6; text-decoration: none;
-            font-size: 15px; word-break: break-all;
-            display: block; margin-bottom: 10px;
-        }
+        .tg-link { color: #64b5f6; text-decoration: none; font-size: 15px; word-break: break-all; display: block; margin-bottom: 10px; }
     </style>
 </head>
 <body>
 
     <div class="tg-header">
-        <div class="back-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-        </div>
         <div class="profile-pic">
             <span style="color:#000">ටෙලිග්‍රෑම්<br>ලින්ක්</span>
         </div>
@@ -125,13 +137,23 @@
             <div class="channel-name">ටෙලිග්‍රෑම් ලින්ක් <span>🔗</span></div>
             <div class="sub-count">11.7K subscribers</div>
         </div>
-        <div class="more-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7f91a4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+        
+        <div class="menu-container">
+            <div class="more-icon" onclick="toggleMenu()">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7f91a4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
+            </div>
+            <div id="myDropdown" class="dropdown-menu">
+                <a href="https://t.me/telegramlinks" target="_blank">Join our Channel</a>
+            </div>
         </div>
     </div>
 
     <div class="pinned-notice">
-         සමහර ලින්ක් නම් පරණ වෙද්දි වැඩ කරන් නැති වෙයි.
+        <div class="pinned-line"></div>
+        <div class="pinned-content">
+            <div class="pinned-label">Pinned Message</div>
+            <div class="pinned-text">සමහර ලින්ක් නම් පරණ වෙද්දි වැඩ කරන් නැති වෙයි.</div>
+        </div>
     </div>
 
     <div class="filter-container">
@@ -143,6 +165,24 @@
     <div id="chat-feed"></div>
 
     <script>
+        // Toggle Dropdown Menu
+        function toggleMenu() {
+            document.getElementById("myDropdown").classList.toggle("show");
+        }
+
+        // Close menu if clicked outside
+        window.onclick = function(event) {
+            if (!event.target.matches('.more-icon') && !event.target.parentElement.matches('.more-icon')) {
+                var dropdowns = document.getElementsByClassName("dropdown-menu");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
         const links = [
             { date: "December 30", cat: "Movies", title: "Action Movie", url: "https://watchnowvideos.online/unloc?link=https://t.me/example1" },
             { date: "December 30", cat: "Adult", title: "Cuckold Group", url: "https://watchnowvideos.online/unloc?link=https://t.me/example2" },
@@ -177,13 +217,9 @@
                     dayLinks.forEach(link => {
                         let rawUrl = link.url;
                         let displayUrl = rawUrl;
-
-                        // 1. Extract Telegram URL part
                         if (rawUrl.includes("link=")) {
                             displayUrl = rawUrl.split("link=")[1];
                         }
-
-                        // 2. Remove last 2 characters
                         let trimmedUrl = displayUrl.substring(0, displayUrl.length - 2);
 
                         bubbleHTML += `
