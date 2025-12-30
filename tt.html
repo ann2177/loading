@@ -18,7 +18,7 @@
         /* --- TELEGRAM HEADER (Darker Background) --- */
         .tg-header {
             width: 100%;
-            background-color: #17212b; /* මෙය මඳක් තද වර්ණයකි */
+            background-color: #17212b;
             padding: 10px 15px;
             display: flex;
             align-items: center;
@@ -26,6 +26,13 @@
             position: sticky;
             top: 0;
             z-index: 1000;
+        }
+
+        .back-icon { 
+            margin-right: 25px; 
+            cursor: pointer; 
+            display: flex;
+            align-items: center;
         }
 
         .profile-pic {
@@ -77,13 +84,13 @@
         /* --- PINNED MESSAGE (Slightly Lighter Background) --- */
         .pinned-notice {
             width: 100%;
-            background-color: #1c2733; /* Header එකට වඩා මඳක් ලා පැහැති වර්ණය */
+            background-color: #1c2733; 
             padding: 7px 15px;
             box-sizing: border-box;
             display: flex;
             align-items: center;
             position: relative;
-            border-bottom: 1px solid #0e1621; /* පහළින් වෙන් කිරීම */
+            border-bottom: 1px solid #0e1621;
         }
 
         .pinned-line {
@@ -114,6 +121,12 @@
 <body>
 
     <div class="tg-header">
+        <div class="back-icon" onclick="location.href='/'">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+        </div>
         <div class="profile-pic">
             <span style="color:#000">ටෙලිග්‍රෑම්<br>ලින්ක්</span>
         </div>
