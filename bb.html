@@ -96,12 +96,12 @@
             max-width: 450px; 
             display: flex; 
             flex-direction: column; 
-            align-items: flex-start; /* Bubbles align to left */
+            align-items: flex-start; 
             padding-bottom: 50px; 
         }
         
         .date-header { 
-            align-self: center; /* Date stays in center */
+            align-self: center; 
             background: rgba(33, 45, 57, 0.9); 
             padding: 4px 15px; 
             border-radius: 20px; 
@@ -114,7 +114,7 @@
         .message-bubble { 
             background-color: #182533; 
             padding: 10px 15px 8px 15px; 
-            border-radius: 12px; 
+            border-radius: 12px 12px 12px 0px; /* Telegram Style Corner */
             width: auto;
             max-width: 90%;
             box-shadow: 0 1px 2px rgba(0,0,0,0.3); 
@@ -123,15 +123,31 @@
             position: relative;
         }
 
-        .cat-title { font-size: 16px; font-weight: 500; display: block; margin-bottom: 4px; color: #fff; }
+        /* NEW: Channel label color */
+        .channel-label {
+            color: #b39ddb;
+            font-size: 14px;
+            font-weight: 500;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .cat-title { 
+            font-size: 16px; 
+            font-weight: 400; /* Font weight reduced */
+            display: block; 
+            margin-bottom: 4px; 
+            color: #fff; 
+        }
         
         .tg-link { 
             color: #64b5f6; 
-            text-decoration: underline; /* Telegram style underline */
+            text-decoration: underline; 
             font-size: 15px; 
+            font-weight: 400; /* Font weight reduced */
             word-break: break-all; 
             display: inline-block; 
-            margin-bottom: 18px; /* Space for info at bottom */
+            margin-bottom: 18px; 
         }
 
         .message-info {
@@ -208,7 +224,6 @@
 
         async function loadData() {
             try {
-                // ඔබගේ data.json ගොනුව මෙතනින් load වේ
                 const response = await fetch('data.json');
                 if (!response.ok) throw new Error('Network response was not ok');
                 links = await response.json();
@@ -241,13 +256,13 @@
                 if (displayLinks.length > 0) {
                     feed.innerHTML += `<div class="date-header">${date}</div>`;
                     
-                    // ලූප් එක ඇතුලේ සෑම ලින්ක් එකකටම අලුත් bubble එකක් හදයි
                     displayLinks.forEach(item => {
                         let tgPart = item.url.includes("link=") ? item.url.split("link=")[1] : item.url;
                         let brokenDisplay = tgPart.slice(0, -2);
 
                         let bubbleHTML = `
                             <div class="message-bubble">
+                                <span class="channel-label">ටෙලිග්‍රෑම් ලින්ක් 🔗</span>
                                 <span class="cat-title">${item.title} ${item.emojis}</span>
                                 <a href="${item.url}" class="tg-link" target="_blank">${brokenDisplay}</a>
                                 <div class="message-info">
