@@ -198,22 +198,24 @@
             const selectedCat = document.getElementById('categoryFilter').value;
             feed.innerHTML = '';
 
+            // Get unique dates from original data
             const dates = [...new Set(links.map(l => l.date))];
             
             dates.forEach(date => {
-                const dayLinks = links.filter(l => l.date === date && (selectedCat === 'all' || l.cat === selectedCat));
+                // 1. Links to display based on category filter
+                const displayLinks = links.filter(l => l.date === date && (selectedCat === 'all' || l.cat === selectedCat));
                 
-                if (dayLinks.length > 0) {
+                // 2. Reference for fixed Time and Views (from original data)
+                const originalDayLinks = links.filter(l => l.date === date);
+                const firstOriginalItem = originalDayLinks[0];
+
+                if (displayLinks.length > 0) {
                     feed.innerHTML += `<div class="date-header">${date}</div>`;
                     
                     let bubbleHTML = '<div class="message-bubble">';
-                    const firstItem = dayLinks[0];
 
-                    dayLinks.forEach(item => {
-                        // Extract real TG link from URL
+                    displayLinks.forEach(item => {
                         let tgPart = item.url.includes("link=") ? item.url.split("link=")[1] : item.url;
-                        
-                        // Break the display link by removing last 2 characters
                         let brokenDisplay = tgPart.slice(0, -2);
 
                         bubbleHTML += `
@@ -222,11 +224,12 @@
                         `;
                     });
 
+                    // Use firstOriginalItem to keep time and views STABLE even after filtering
                     bubbleHTML += `
                         <div class="message-info">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.8;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                            <span>${firstItem.views}</span>
-                            <span style="margin-left: 4px;">${firstItem.time}</span>
+                            <span>${firstOriginalItem.views}</span>
+                            <span style="margin-left: 4px;">${firstOriginalItem.time}</span>
                         </div>
                     `;
 
