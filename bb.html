@@ -5,16 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telegram Links - Telegram Hub</title>
     <style>
-        body {
-            background-color: #0e1621;
-            /* Aponar deya background image link ti eikhane add kora hoyeche */
-            background-image: url('https://i.postimg.cc/hPWmjZyy/2099f2dda704cb708fe20347afb964ba.jpg');
-            background-attachment: fixed;
+        /* --- BACKGROUND FIX --- */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /* ඔබගේ image link එක */
+            background-image: url('https://i.postimg.cc/52fnH27s/1f135a074a169f90e5-upscayl-2x-upscayl-standard-4x.webp');
             background-size: cover;
+            background-position: center;
+            z-index: -1; /* අන්තර්ගතයට පිටුපසින් තැබීමට */
+            will-change: transform; /* Performance වැඩි කිරීමට */
+        }
+
+        body {
+            margin: 0; padding: 0;
             color: white;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            margin: 0; padding: 0;
             display: flex; flex-direction: column; align-items: center;
+            min-height: 100vh;
+            background-color: #0e1621; /* Image එක load වන තෙක් පෙනෙන පාට */
         }
 
         /* --- TELEGRAM HEADER --- */
@@ -104,10 +117,10 @@
         
         .date-header { 
             align-self: center; 
-            background: rgba(33, 45, 57, 0.9); 
+            background: rgba(33, 45, 57, 0.8); 
             padding: 4px 15px; 
             border-radius: 20px; 
-            font-size: 13px; 
+            font-size: 12px; 
             margin: 15px 0; 
             color: #fff; 
         }
@@ -133,7 +146,7 @@
             font-size: 15px; 
             word-break: break-all; 
             display: inline-block; 
-            margin-bottom: 15px; 
+            margin-bottom: 12px; 
         }
 
         .message-info {
@@ -144,7 +157,6 @@
             color: #7f91a4;
             font-size: 10px;
             user-select: none;
-            margin-top: -10px;
         }
     </style>
 </head>
@@ -186,6 +198,7 @@
     <div id="chat-feed"></div>
 
     <script>
+        // --- Menu Logic ---
         const menuBtn = document.getElementById('menuBtn');
         const dropdown = document.getElementById('myDropdown');
         if (menuBtn) {
@@ -248,8 +261,8 @@
                                 <a href="${item.url}" class="tg-link" target="_blank">${brokenDisplay}</a>
                                 <div class="message-info">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.8;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                    <span>${item.views}</span>
-                                    <span style="margin-left: 4px;">${item.time}</span>
+                                    <span style="margin-left: 3px;">${item.views}</span>
+                                    <span style="margin-left: 8px;">${item.time}</span>
                                 </div>
                             </div>
                         `;
