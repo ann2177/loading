@@ -15,7 +15,7 @@
             display: flex; flex-direction: column; align-items: center;
         }
 
-        /* --- TELEGRAM HEADER (STABLE) --- */
+        /* --- TELEGRAM HEADER --- */
         .tg-header {
             width: 100%;
             background-color: #17212b;
@@ -85,42 +85,41 @@
         /* --- FILTER & FEED --- */
         .filter-container { width: 90%; max-width: 450px; margin: 15px 0; }
         select { width: 100%; padding: 12px; background: #182533; color: white; border: 1px solid #2b3949; border-radius: 8px; font-size: 16px; outline: none; }
-        #chat-feed { width: 95%; max-width: 450px; display: flex; flex-direction: column; align-items: flex-start; padding-bottom: 50px; }
-        .date-header { align-self: center; background: rgba(33, 45, 57, 0.9); padding: 4px 15px; border-radius: 20px; font-size: 13px; margin: 15px 0; color: #fff; }
+        #chat-feed { width: 95%; max-width: 450px; display: flex; flex-direction: column; align-items: center; padding-bottom: 50px; }
+        .date-header { background: rgba(33, 45, 57, 0.9); padding: 4px 15px; border-radius: 20px; font-size: 13px; margin: 15px 0; color: #fff; }
         
-        /* --- MESSAGE BUBBLE STYLE --- */
         .message-bubble { 
             background-color: #182533; 
-            padding: 10px 12px; 
+            padding: 12px 15px 8px 15px; 
             border-radius: 12px; 
-            width: fit-content; 
-            max-width: 92%; 
+            width: 100%; 
             box-shadow: 0 1px 2px rgba(0,0,0,0.3); 
             margin-bottom: 10px; 
             box-sizing: border-box; 
-            position: relative;
         }
-        .cat-title { font-size: 17px; font-weight: 400; display: block; color: #fff; margin-bottom: 2px; }
+        .cat-title { font-size: 16px; font-weight: 500; display: block; margin-top: 5px; color: #fff; }
+        
+        /* --- UNDERLINED LINKS --- */
         .tg-link { 
             color: #64b5f6; 
             text-decoration: underline; 
-            font-size: 16px; 
+            font-size: 15px; 
             word-break: break-all; 
-            display: inline-block; 
-            margin-bottom: 4px;
+            display: block; 
+            margin-bottom: 8px; 
         }
-        
-        /* Views and Time Container */
-        .bubble-meta {
+
+        /* --- MESSAGE INFO --- */
+        .message-info {
             display: flex;
-            align-items: center;
             justify-content: flex-end;
-            gap: 6px;
-            font-size: 11px;
+            align-items: center;
+            gap: 4px;
             color: #7f91a4;
-            margin-top: -2px;
+            font-size: 11px;
+            user-select: none;
+            margin-top: 4px;
         }
-        .views-count { display: flex; align-items: center; gap: 3px; }
     </style>
 </head>
 <body>
@@ -132,7 +131,7 @@
         <div class="profile-pic"><span style="color:#000">ටෙලිග්‍රෑම්<br>ලින්ක්</span></div>
         <div class="channel-info">
             <div class="channel-name">ටෙලිග්‍රෑම් ලින්ක් <span>🔗</span></div>
-            <div class="sub-count">11.9K subscribers</div>
+            <div class="sub-count">11.7K subscribers</div>
         </div>
         <div class="menu-container">
             <div class="more-icon" id="menuBtn">
@@ -155,10 +154,10 @@
     <div class="filter-container">
         <select id="categoryFilter" onchange="filterContent()"><option value="all">සියලුම වර්ග (All Categories)</option></select>
     </div>
-    
     <div id="chat-feed"></div>
 
     <script>
+        // MORE MENU LOGIC
         const menuBtn = document.getElementById('menuBtn');
         const dropdown = document.getElementById('myDropdown');
         if (menuBtn) {
@@ -172,10 +171,10 @@
         });
 
         const links = [
-            { date: "December 30", cat: "Movies", title: "Action Movie 🎬", url: "https://t.me/example1", time: "8:35 AM", views: "1.9K" },
-            { date: "December 30", cat: "Adult", title: "Lady Expose 🥵💦", url: "https://t.me/exposeladygr", time: "8:35 AM", views: "2.3K" },
-            { date: "December 29", cat: "General", title: "ලින්ක් සාගරය", url: "https://t.me/+_xRMfmQUbJdhYjc1", time: "11:20 PM", views: "3.1K" },
-            { date: "December 29", cat: "General", title: "හස්ත කර්මාන්තය", url: "https://t.me/+xFyzVb0qFww5ZTY9", time: "11:20 PM", views: "1.7K" }
+            { date: "December 30", cat: "Movies", title: "Action Movie", url: "https://watchnowvideos.online/unloc?link=https://t.me/example1" },
+            { date: "December 30", cat: "Adult", title: "Cuckold Group", url: "https://watchnowvideos.online/unloc?link=https://t.me/example2" },
+            { date: "December 29", cat: "General", title: "ලින්ක් සාගරය", url: "https://watchnowvideos.online/unloc?link=https://t.me/+_xRMfmQUbJdhYjc1" },
+            { date: "December 29", cat: "General", title: "හස්ත කර්මාන්තය", url: "https://watchnowvideos.online/unloc?link=https://t.me/+xFyzVb0qFww5ZTY9" }
         ];
 
         function render() {
@@ -184,6 +183,9 @@
             const selectedCat = filter.value;
             feed.innerHTML = '';
             
+            // Emoji List
+            const emojis = ["💀", "🩷", "🥵", "😍", "💀", "😈", "🎀", "❤️‍🔥", "💦", "🔞", "💯"];
+
             if(filter.options.length <= 1) {
                 const cats = [...new Set(links.map(l => l.cat))];
                 cats.forEach(c => {
@@ -192,27 +194,41 @@
                     filter.appendChild(opt);
                 });
             }
-            
+
             const dates = [...new Set(links.map(l => l.date))];
             dates.forEach(date => {
                 const dayLinks = links.filter(l => l.date === date && (selectedCat === 'all' || l.cat === selectedCat));
                 if (dayLinks.length > 0) {
                     feed.innerHTML += `<div class="date-header">${date}</div>`;
+                    
+                    let bubbleHTML = '<div class="message-bubble">';
                     dayLinks.forEach(link => {
-                        feed.innerHTML += `
-                            <div class="message-bubble">
-                                <span class="cat-title">${link.title}</span>
-                                <a href="${link.url}" class="tg-link" target="_blank">${link.url}</a>
-                                <div class="bubble-meta">
-                                    <span class="views-count">
-                                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                        ${link.views}
-                                    </span>
-                                    <span>${link.time}</span>
-                                </div>
-                            </div>
-                        `;
+                        let displayUrl = link.url.includes("link=") ? link.url.split("link=")[1] : link.url;
+                        
+                        // Pick 2 random emojis
+                        const e1 = emojis[Math.floor(Math.random() * emojis.length)];
+                        const e2 = emojis[Math.floor(Math.random() * emojis.length)];
+                        
+                        bubbleHTML += `<span class="cat-title">${link.title} ${e1}${e2}</span><a href="${link.url}" class="tg-link" target="_blank">${displayUrl}</a>`;
                     });
+
+                    // Random Views (1.5K - 9.9K)
+                    const randomViews = (Math.random() * (9.9 - 1.5) + 1.5).toFixed(1); 
+                    // Random Time (AM/PM)
+                    let hour = Math.floor(Math.random() * 12) + 1;
+                    const min = Math.floor(Math.random() * 60).toString().padStart(2, '0');
+                    const ampm = Math.random() >= 0.5 ? 'AM' : 'PM';
+                    const randomTime = `${hour}:${min} ${ampm}`;
+
+                    bubbleHTML += `
+                        <div class="message-info">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.8;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            <span>${randomViews}K</span>
+                            <span style="margin-left: 4px;">${randomTime}</span>
+                        </div>`;
+
+                    bubbleHTML += '</div>';
+                    feed.innerHTML += bubbleHTML;
                 }
             });
         }
