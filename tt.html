@@ -15,10 +15,10 @@
             display: flex; flex-direction: column; align-items: center;
         }
 
-        /* --- TELEGRAM HEADER STYLE --- */
+        /* --- TELEGRAM HEADER (Darker Background) --- */
         .tg-header {
             width: 100%;
-            background-color: #17212b;
+            background-color: #17212b; /* මෙය මඳක් තද වර්ණයකි */
             padding: 10px 15px;
             display: flex;
             align-items: center;
@@ -28,7 +28,6 @@
             z-index: 1000;
         }
 
-        /* Profile Pic Left aligned now */
         .profile-pic {
             width: 45px; 
             height: 45px;
@@ -54,16 +53,9 @@
         .channel-name span { margin-left: 5px; font-size: 18px; }
         .sub-count { font-size: 13px; color: #7f91a4; margin-top: 2px; }
 
-        /* --- DROPDOWN MENU STYLE --- */
-        .menu-container {
-            position: relative;
-        }
-
-        .more-icon { 
-            cursor: pointer; 
-            padding: 5px;
-        }
-
+        /* --- MENU SECTION --- */
+        .menu-container { position: relative; }
+        .more-icon { cursor: pointer; padding: 5px; }
         .dropdown-menu {
             display: none;
             position: absolute;
@@ -74,35 +66,24 @@
             border-radius: 8px;
             min-width: 160px;
             z-index: 1001;
-            overflow: hidden;
         }
-
         .dropdown-menu a {
-            color: white;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            font-size: 14px;
-            transition: background 0.2s;
+            color: white; padding: 12px 16px; text-decoration: none;
+            display: block; font-size: 14px;
         }
-
-        .dropdown-menu a:hover {
-            background-color: #2b3949;
-        }
-
-        /* Show menu class */
+        .dropdown-menu a:hover { background-color: #2b3949; }
         .show { display: block; }
 
-        /* --- PINNED MESSAGE STYLE --- */
+        /* --- PINNED MESSAGE (Slightly Lighter Background) --- */
         .pinned-notice {
             width: 100%;
-            background-color: #17212b;
-            padding: 6px 15px;
+            background-color: #1c2733; /* Header එකට වඩා මඳක් ලා පැහැති වර්ණය */
+            padding: 7px 15px;
             box-sizing: border-box;
             display: flex;
-            align-items: flex-start;
+            align-items: center;
             position: relative;
-            border-bottom: 1px solid #0e1621;
+            border-bottom: 1px solid #0e1621; /* පහළින් වෙන් කිරීම */
         }
 
         .pinned-line {
@@ -113,11 +94,14 @@
             margin-right: 12px;
         }
 
-        .pinned-content { display: flex; flex-direction: column; }
-        .pinned-label { color: #64b5f6; font-size: 14px; font-weight: 500; margin-bottom: 1px; }
-        .pinned-text { color: #7f91a4; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .pinned-content { display: flex; flex-direction: column; overflow: hidden; }
+        .pinned-label { color: #64b5f6; font-size: 14px; font-weight: 500; }
+        .pinned-text { 
+            color: #7f91a4; font-size: 14px; 
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; 
+        }
 
-        /* Filter & Chat Feed Styles */
+        /* --- FILTER & FEED --- */
         .filter-container { width: 90%; max-width: 450px; margin: 15px 0; }
         select { width: 100%; padding: 12px; background: #182533; color: white; border: 1px solid #2b3949; border-radius: 8px; font-size: 16px; outline: none; }
         #chat-feed { width: 95%; max-width: 450px; display: flex; flex-direction: column; align-items: center; padding-bottom: 50px; }
@@ -137,7 +121,6 @@
             <div class="channel-name">ටෙලිග්‍රෑම් ලින්ක් <span>🔗</span></div>
             <div class="sub-count">11.7K subscribers</div>
         </div>
-        
         <div class="menu-container">
             <div class="more-icon" onclick="toggleMenu()">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7f91a4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="12" cy="19" r="1"></circle></svg>
@@ -165,20 +148,13 @@
     <div id="chat-feed"></div>
 
     <script>
-        // Toggle Dropdown Menu
-        function toggleMenu() {
-            document.getElementById("myDropdown").classList.toggle("show");
-        }
-
-        // Close menu if clicked outside
+        function toggleMenu() { document.getElementById("myDropdown").classList.toggle("show"); }
         window.onclick = function(event) {
             if (!event.target.matches('.more-icon') && !event.target.parentElement.matches('.more-icon')) {
                 var dropdowns = document.getElementsByClassName("dropdown-menu");
                 for (var i = 0; i < dropdowns.length; i++) {
                     var openDropdown = dropdowns[i];
-                    if (openDropdown.classList.contains('show')) {
-                        openDropdown.classList.remove('show');
-                    }
+                    if (openDropdown.classList.contains('show')) { openDropdown.classList.remove('show'); }
                 }
             }
         }
@@ -206,34 +182,26 @@
             }
 
             const dates = [...new Set(links.map(l => l.date))];
-
             dates.forEach(date => {
                 const dayLinks = links.filter(l => l.date === date && (selectedCat === 'all' || l.cat === selectedCat));
-                
                 if (dayLinks.length > 0) {
                     feed.innerHTML += `<div class="date-header">${date}</div>`;
                     let bubbleHTML = '<div class="message-bubble">';
-                    
                     dayLinks.forEach(link => {
                         let rawUrl = link.url;
                         let displayUrl = rawUrl;
-                        if (rawUrl.includes("link=")) {
-                            displayUrl = rawUrl.split("link=")[1];
-                        }
+                        if (rawUrl.includes("link=")) { displayUrl = rawUrl.split("link=")[1]; }
                         let trimmedUrl = displayUrl.substring(0, displayUrl.length - 2);
-
                         bubbleHTML += `
                             <span class="cat-title">${link.title}</span>
                             <a href="${link.url}" class="tg-link" target="_blank">${trimmedUrl}</a>
                         `;
                     });
-                    
                     bubbleHTML += '</div>';
                     feed.innerHTML += bubbleHTML;
                 }
             });
         }
-
         function filterContent() { render(); }
         render(); 
     </script>
