@@ -5,29 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Telegram Links - Telegram Hub</title>
     <style>
-        /* --- BACKGROUND FIX --- */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            /* ඔබගේ image link එක */
-            background-image: url('https://i.postimg.cc/52fnH27s/1f135a074a169f90e5-upscayl-2x-upscayl-standard-4x.webp');
-            background-size: cover;
-            background-position: center;
-            z-index: -1; /* අන්තර්ගතයට පිටුපසින් තැබීමට */
-            will-change: transform; /* Performance වැඩි කිරීමට */
-        }
-
         body {
-            margin: 0; padding: 0;
+            background-color: #0e1621;
+            background-image: radial-gradient(#1c2938 1px, transparent 1px);
+            background-size: 20px 20px;
             color: white;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0; padding: 0;
             display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh;
-            background-color: #0e1621; /* Image එක load වන තෙක් පෙනෙන පාට */
         }
 
         /* --- TELEGRAM HEADER --- */
@@ -87,7 +72,7 @@
         /* --- STICKY PINNED NOTICE --- */
         .pinned-notice {
             width: 100%;
-            background-color: rgba(28, 39, 51, 0.95); 
+            background-color: #1c2733; 
             padding: 7px 15px;
             box-sizing: border-box;
             display: flex;
@@ -111,16 +96,16 @@
             max-width: 450px; 
             display: flex; 
             flex-direction: column; 
-            align-items: flex-start; 
+            align-items: flex-start; /* Bubbles align to left */
             padding-bottom: 50px; 
         }
         
         .date-header { 
-            align-self: center; 
-            background: rgba(33, 45, 57, 0.8); 
+            align-self: center; /* Date stays in center */
+            background: rgba(33, 45, 57, 0.9); 
             padding: 4px 15px; 
             border-radius: 20px; 
-            font-size: 12px; 
+            font-size: 13px; 
             margin: 15px 0; 
             color: #fff; 
         }
@@ -142,11 +127,11 @@
         
         .tg-link { 
             color: #64b5f6; 
-            text-decoration: underline; 
+            text-decoration: underline; /* Telegram style underline */
             font-size: 15px; 
             word-break: break-all; 
             display: inline-block; 
-            margin-bottom: 12px; 
+            margin-bottom: 18px; /* Space for info at bottom */
         }
 
         .message-info {
@@ -157,6 +142,9 @@
             color: #7f91a4;
             font-size: 10px;
             user-select: none;
+            position: absolute;
+            right: 10px;
+            bottom: 6px;
         }
     </style>
 </head>
@@ -215,10 +203,12 @@
             alert("බත් කාලා ඈ...");
         }
 
+        // --- Data Handling ---
         let links = [];
 
         async function loadData() {
             try {
+                // ඔබගේ data.json ගොනුව මෙතනින් load වේ
                 const response = await fetch('data.json');
                 if (!response.ok) throw new Error('Network response was not ok');
                 links = await response.json();
@@ -251,6 +241,7 @@
                 if (displayLinks.length > 0) {
                     feed.innerHTML += `<div class="date-header">${date}</div>`;
                     
+                    // ලූප් එක ඇතුලේ සෑම ලින්ක් එකකටම අලුත් bubble එකක් හදයි
                     displayLinks.forEach(item => {
                         let tgPart = item.url.includes("link=") ? item.url.split("link=")[1] : item.url;
                         let brokenDisplay = tgPart.slice(0, -2);
@@ -261,8 +252,8 @@
                                 <a href="${item.url}" class="tg-link" target="_blank">${brokenDisplay}</a>
                                 <div class="message-info">
                                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="opacity: 0.8;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                                    <span style="margin-left: 3px;">${item.views}</span>
-                                    <span style="margin-left: 8px;">${item.time}</span>
+                                    <span>${item.views}</span>
+                                    <span style="margin-left: 4px;">${item.time}</span>
                                 </div>
                             </div>
                         `;
@@ -273,6 +264,7 @@
         }
 
         function filterContent() { render(); }
+        
         loadData();
     </script>
 </body>
